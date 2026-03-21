@@ -1,4 +1,6 @@
 {
+  "$schema": "https://glama.ai/mcp/schemas/server.json",
+  "maintainers": ["kshvab"],
   "name": "competlab",
   "display_name": "CompetLab MCP Server",
   "description": "Competitive intelligence for B2B SaaS — monitor competitors across 5 dimensions including AI Visibility (how ChatGPT, Claude, and Gemini rank your brand). 24 read-only MCP tools.",
