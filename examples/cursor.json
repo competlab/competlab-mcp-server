@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "competlab": {
+      "url": "https://mcp.competlab.com/mcp",
+      "headers": {
+        "CL-API-Key": "YOUR_COMPETLAB_API_KEY"
+      }
+    }
+  }
+}

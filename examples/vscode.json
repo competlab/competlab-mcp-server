@@ -1,0 +1,19 @@
+{
+  "inputs": [
+    {
+      "type": "promptString",
+      "id": "competlab-api-key",
+      "description": "CompetLab API Key (starts with cl_live_)",
+      "password": true
+    }
+  ],
+  "servers": {
+    "competlab": {
+      "type": "http",
+      "url": "https://mcp.competlab.com/mcp",
+      "headers": {
+        "CL-API-Key": "${input:competlab-api-key}"
+      }
+    }
+  }
+}
