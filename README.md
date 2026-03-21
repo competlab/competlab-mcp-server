@@ -277,7 +277,7 @@ MCP access is included with every CompetLab subscription ($99/mo). Free trial in
 
 MIT (covers documentation and configs in this repo) — see [LICENSE](./LICENSE)
 
-The CompetLab MCP server and platform are commercial software. See [competlab.com/terms](https://competlab.com/terms).
+The CompetLab MCP server and platform are commercial software. See [competlab.com/terms-and-conditions](https://competlab.com/terms-and-conditions).
 
 ---
 
