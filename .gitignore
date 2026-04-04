@@ -2,3 +2,5 @@
 .DS_Store
 Thumbs.db
 *.swp
+node_modules/
+dist/
