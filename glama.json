@@ -7,7 +7,7 @@
   "repository": "https://github.com/competlab/competlab-mcp-server",
   "homepage": "https://competlab.com/developers/mcp",
   "author": "CompetLab",
-  "license": "Commercial",
+  "license": "MIT",
   "categories": [
     "competitive-intelligence",
     "marketing",
