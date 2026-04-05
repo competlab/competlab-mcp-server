@@ -6,8 +6,9 @@
   "description": "Competitive intelligence for B2B SaaS — monitor competitors across 5 dimensions including AI Visibility (how ChatGPT, Claude, and Gemini rank your brand). 24 read-only MCP tools.",
   "repository": "https://github.com/competlab/competlab-mcp-server",
   "homepage": "https://competlab.com/developers/mcp",
-  "author": "CompetLab",
+  "author": "competlab",
   "license": "MIT",
+  "version": "1.0.3",
   "categories": [
     "competitive-intelligence",
     "marketing",
@@ -26,7 +27,7 @@
     "gemini",
     "mcp-server"
   ],
-  "transport": "streamable-http",
+  "transport": "stdio",
   "endpoint": "https://mcp.competlab.com/mcp",
   "auth": {
     "type": "api-key",
