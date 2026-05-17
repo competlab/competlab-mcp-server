@@ -17,12 +17,22 @@ const pagination = {
     .describe("Items per page (default: 20, max: 100)"),
 };
 
+export interface ToolAnnotations {
+  readOnlyHint?: boolean;
+  destructiveHint?: boolean;
+  idempotentHint?: boolean;
+  openWorldHint?: boolean;
+}
+
 export interface ToolDef {
   name: string;
   description: string;
   parameters: z.ZodObject<any>;
   path: (args: Record<string, any>) => string;
+  method?: "GET" | "POST";
   queryParams?: string[];
+  bodyParams?: string[];
+  annotations?: ToolAnnotations;
 }
 
 export const tools: ToolDef[] = [
@@ -323,5 +333,110 @@ export const tools: ToolDef[] = [
       projectId: objectId("Project ID (from list_projects)"),
     }),
     path: (a) => `/v1/projects/${a.projectId}/analysis/action-plan`,
+  },
+
+  // ── Free Tools (no project context required) ──────────────
+  {
+    name: "check_sitemap",
+    description:
+      "Live sitemap analysis for any domain — discovers URLs, categorizes by section, identifies content gaps and depth. Works on any public domain (no project setup required). Read-only. Returns JSON object.",
+    parameters: z.object({
+      domain: z.string().describe("Domain to scan, e.g. example.com"),
+      sitemapUrl: z
+        .string()
+        .url()
+        .optional()
+        .describe(
+          "Optional full URL to a specific sitemap (with http:// or https:// prefix). Short-circuits discovery.",
+        ),
+    }),
+    method: "POST",
+    path: () => "/v1/tools/sitemap-visualizer",
+    bodyParams: ["domain", "sitemapUrl"],
+    annotations: { readOnlyHint: true, openWorldHint: true },
+  },
+  {
+    name: "check_ai_crawlers",
+    description:
+      "Live check of AI crawler access via robots.txt and meta tags — covers GPTBot, ClaudeBot, Google-Extended, PerplexityBot, and others. Returns per-crawler allow/block verdict. Works on any public domain (no project setup required). Read-only. Returns JSON object.",
+    parameters: z.object({
+      domain: z.string().describe("Domain to scan, e.g. example.com"),
+      industry: z
+        .string()
+        .optional()
+        .describe(
+          "Industry context for benchmark comparison. Current values: news-media, arts-entertainment, law-government, finance-healthcare, saas-tech, ecommerce, other. The backend may add new values over time; pass any of the listed strings (or a future one) and the API will validate.",
+        ),
+    }),
+    method: "POST",
+    path: () => "/v1/tools/ai-crawler-checker",
+    bodyParams: ["domain", "industry"],
+    annotations: { readOnlyHint: true, openWorldHint: true },
+  },
+  {
+    name: "start_tech_stack_scan",
+    description:
+      "Start an async tech-stack detection on any domain — 117 detection rules across tech stack (hosting / frameworks / CMS / payments), growth stack (analytics / marketing / CRM / advertising), and engagement stack (support / forms / video / monitoring). Returns scanId immediately; poll with `get_tech_stack_scan`. Typical completion: 30-90 seconds. Creates a scan record.",
+    parameters: z.object({
+      domain: z.string().describe("Domain to scan, e.g. example.com"),
+    }),
+    method: "POST",
+    path: () => "/v1/tools/tech-stack/scans",
+    bodyParams: ["domain"],
+    annotations: { readOnlyHint: false, openWorldHint: true },
+  },
+  {
+    name: "get_tech_stack_scan",
+    description:
+      "Retrieve status or full results of a tech-stack scan by scanId. Returns current status while running, detected technologies with confidence scores when complete. Recommended poll interval: 5-10 seconds. Read-only.",
+    parameters: z.object({
+      scanId: objectId("Scan ID (from start_tech_stack_scan)"),
+    }),
+    path: (a) => `/v1/tools/tech-stack/scans/${a.scanId}`,
+    annotations: { readOnlyHint: true, openWorldHint: true },
+  },
+  {
+    name: "start_trust_signals_scan",
+    description:
+      "Start an async trust-signals analysis on any domain — 34 signals across enterprise readiness, third-party validation, social proof, brand authority, and risk reversal. Returns scanId immediately; poll with `get_trust_signals_scan`. Typical completion: 30-90 seconds. Creates a scan record.",
+    parameters: z.object({
+      domain: z.string().describe("Domain to scan, e.g. example.com"),
+    }),
+    method: "POST",
+    path: () => "/v1/tools/trust-signals/scans",
+    bodyParams: ["domain"],
+    annotations: { readOnlyHint: false, openWorldHint: true },
+  },
+  {
+    name: "get_trust_signals_scan",
+    description:
+      "Retrieve status or full results of a trust-signals scan by scanId. Returns current status while running, per-signal verdicts and tier verdict when complete. Recommended poll interval: 5-10 seconds. Read-only.",
+    parameters: z.object({
+      scanId: objectId("Scan ID (from start_trust_signals_scan)"),
+    }),
+    path: (a) => `/v1/tools/trust-signals/scans/${a.scanId}`,
+    annotations: { readOnlyHint: true, openWorldHint: true },
+  },
+  {
+    name: "start_agent_adoption_scan",
+    description:
+      "Start an async Agent-Adoption Check on any domain — 25 checks across discoverability, access control, content readability, and agent endpoints, per the open Agent-Adoption Specification. Returns scanId immediately; poll with `get_agent_adoption_scan`. Typical completion: 30-90 seconds. Creates a scan record.",
+    parameters: z.object({
+      domain: z.string().describe("Domain to scan, e.g. example.com"),
+    }),
+    method: "POST",
+    path: () => "/v1/tools/agent-adoption/scans",
+    bodyParams: ["domain"],
+    annotations: { readOnlyHint: false, openWorldHint: true },
+  },
+  {
+    name: "get_agent_adoption_scan",
+    description:
+      "Retrieve status or full results of an Agent-Adoption Check by scanId. Returns current status while running, complete results when finished. Recommended poll interval: 5-10 seconds. Read-only.",
+    parameters: z.object({
+      scanId: objectId("Scan ID (from start_agent_adoption_scan)"),
+    }),
+    path: (a) => `/v1/tools/agent-adoption/scans/${a.scanId}`,
+    annotations: { readOnlyHint: true, openWorldHint: true },
   },
 ];

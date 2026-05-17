@@ -18,7 +18,7 @@ Replace `YOUR_COMPETLAB_API_KEY` with your actual API key (starts with `cl_live_
 claude mcp list
 ```
 
-You should see `competlab` listed with 24 tools.
+You should see `competlab` listed with 32 tools.
 
 ## Get your API key
 

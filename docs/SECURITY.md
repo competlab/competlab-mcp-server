@@ -2,7 +2,7 @@
 
 ## Scope & Permissions
 
-**All 24 MCP tools are read-only.** There are no tools that create, update, or delete data. The MCP server provides access to competitive intelligence data but cannot modify your CompetLab account, projects, or settings.
+**29 of 32 MCP tools are read-only** — they cannot create, update, or delete CompetLab data. The 3 exceptions (`start_tech_stack_scan`, `start_trust_signals_scan`, `start_agent_adoption_scan`) create a new scan record under your account when you ask for an async free-tool scan; they never modify existing projects, competitors, or settings.
 
 ## Authentication
 

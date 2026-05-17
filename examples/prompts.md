@@ -78,6 +78,24 @@ Once CompetLab MCP is connected, try these prompts with your AI agent. All promp
 
 > "Filter alerts for just pricing changes from competitor X"
 
+## Free Tools (no project setup required)
+
+These work on any public domain — no `projectId` needed. Sync tools return immediately; the async scans return a `scanId` you can poll.
+
+> "Run a sitemap check on stripe.com and tell me what content categories they have"
+
+> "Check if openai.com blocks AI crawlers (GPTBot, ClaudeBot, etc.) in their robots.txt"
+
+> "Compare AI-crawler policies for openai.com, anthropic.com, and google.com"
+
+> "Detect the tech stack on vercel.com — what frameworks, analytics, and CMS are they using?"
+
+> "Start a trust-signals scan on linear.app and poll until it completes — then summarize their enterprise readiness"
+
+> "Run an agent-adoption check on my domain — what's blocking AI agents from working with my site?"
+
+> "Run sitemap, tech-stack, and trust-signals scans on competitor X in parallel, then summarize what they're doing better than us"
+
 ## Reports & Analysis
 
 > "Build me a competitive briefing I can share with the team"

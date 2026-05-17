@@ -3,7 +3,7 @@
   "name": "com.competlab/mcp-server",
   "title": "CompetLab",
   "description": "Competitive intelligence MCP server for B2B SaaS — monitor competitors across 5 dimensions including how ChatGPT, Claude, and Gemini rank your brand",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "remotes": [
     {
       "type": "streamable-http",

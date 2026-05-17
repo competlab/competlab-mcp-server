@@ -12,7 +12,7 @@ Structured metadata for MCP directories and marketplace submissions.
 | **Server URL** | `https://mcp.competlab.com/mcp` |
 | **Transport** | Streamable HTTP |
 | **Auth** | API key via `CL-API-Key` header or `api_key` query parameter |
-| **Tools Count** | 24 |
+| **Tools Count** | 32 |
 | **Language** | TypeScript |
 | **License** | Commercial (docs repo is MIT) |
 | **Category** | Competitive Intelligence, Marketing, AI & ML, Business Intelligence |
@@ -33,17 +33,17 @@ Structured metadata for MCP directories and marketplace submissions.
 
 ### Short Description (190 chars)
 
-> CompetLab monitors competitors across 5 dimensions including AI Visibility — tracking how ChatGPT, Claude, and Gemini mention and rank brands. 24 MCP tools for dashboards, alerts, and action plans.
+> CompetLab monitors competitors across 5 dimensions including AI Visibility — tracking how ChatGPT, Claude, and Gemini mention and rank brands. 32 MCP tools for dashboards, alerts, action plans, plus 8 free no-setup tools (sitemap, AI crawlers, tech stack, trust signals, agent adoption).
 
 ### Medium Description (500 chars)
 
-> CompetLab MCP Server gives AI agents access to competitive intelligence data across 5 dimensions: Tech & Trust, Content, Positioning, Pricing, and AI Visibility. The unique AI Visibility dimension tracks how ChatGPT, Claude, and Gemini mention and rank brands in response to industry queries — no other CI platform does this. 24 tools covering project management, competitor analysis, dimension dashboards, historical data, alerts, action plans, and scheduling. Built for B2B SaaS teams who need CI integrated into their AI workflows.
+> CompetLab MCP Server gives AI agents access to competitive intelligence data across 5 dimensions: Tech & Trust, Content, Positioning, Pricing, and AI Visibility. The unique AI Visibility dimension tracks how ChatGPT, Claude, and Gemini mention and rank brands in response to industry queries — no other CI platform does this. 32 tools covering project management, competitor analysis, dimension dashboards, historical data, alerts, action plans, scheduling, and 8 free no-setup tools (sitemap, AI crawlers, tech stack, trust signals, agent adoption). Built for B2B SaaS teams who need CI integrated into their AI workflows.
 
 ### Long Description (for G2, Capterra, full directory profiles)
 
 CompetLab is a competitive intelligence platform for B2B SaaS companies. It monitors 5 dimensions across your competitors: Tech & Trust Profile, Content Intelligence, Positioning, Pricing Intelligence, and AI Visibility.
 
-The MCP server exposes 24 tools that let AI agents access the full CompetLab platform: manage projects and competitors, pull dashboard data across all 5 dimensions, review historical trends, check alerts, get AI-generated action plans, and manage monitoring schedules.
+The MCP server exposes 32 tools that let AI agents access the full CompetLab platform: manage projects and competitors, pull dashboard data across all 5 dimensions, review historical trends, check alerts, get AI-generated action plans, manage monitoring schedules, and run 8 free no-setup tools against any public domain (sitemap analysis, AI-crawler access checks, tech-stack detection, trust-signals analysis, agent-adoption checks).
 
 What makes CompetLab unique is the AI Visibility dimension — it tracks how large language models (OpenAI, Claude, Gemini) mention and rank brands in response to industry queries. As buyers increasingly use AI assistants for vendor research, knowing how you appear in AI responses is becoming critical. No other CI platform monitors this.
 
@@ -90,7 +90,7 @@ Built for product marketers, competitive intelligence analysts, and growth teams
 
 ## Security & Scopes
 
-- **All 24 tools are read-only** — no write, delete, or mutation operations
+- **29 of 32 tools are read-only** — the 3 `start_*_scan` tools create scan records under your account but never edit or delete existing data
 - **Data access:** Scoped to the authenticated organization's projects and competitors only
 - **External systems:** The MCP server communicates only with the CompetLab API (`api.competlab.com`). No third-party services are contacted during tool execution.
 - **API key format:** `cl_live_` prefix + 32 hex characters (40 chars total)
@@ -112,6 +112,6 @@ Built for product marketers, competitive intelligence analysts, and growth teams
 
 ## Pricing
 
-MCP access is **included with every CompetLab subscription** ($99/mo). Free 14-day trial includes full MCP access with all 24 tools.
+MCP access is **included with every CompetLab subscription** ($99/mo). Free 14-day trial includes full MCP access with all 32 tools.
 
 No additional fees for MCP usage. No per-call pricing.

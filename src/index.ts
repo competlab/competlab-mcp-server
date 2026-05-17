@@ -2,11 +2,11 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 import { tools } from "./tools.js";
-import { apiGet } from "./api-client.js";
+import { apiGet, apiPost } from "./api-client.js";
 
 const server = new McpServer({
   name: "competlab",
-  version: "1.0.0",
+  version: "1.1.1",
   description:
     "Competitive intelligence for B2B SaaS — monitor competitors across 5 dimensions including AI Visibility.",
 });
@@ -14,14 +14,30 @@ const server = new McpServer({
 // ── Tools ───────────────────────────────────────────────────
 
 for (const tool of tools) {
-  server.tool(tool.name, tool.description, tool.parameters.shape, async (args: Record<string, any>) => {
-    const path = tool.path(args);
-    const query: Record<string, any> = {};
-    for (const key of tool.queryParams ?? []) {
-      if (args[key] !== undefined) query[key] = args[key];
-    }
-    return apiGet(path, Object.keys(query).length ? query : undefined);
-  });
+  server.registerTool(
+    tool.name,
+    {
+      description: tool.description,
+      inputSchema: tool.parameters.shape,
+      ...(tool.annotations ? { annotations: tool.annotations } : {}),
+    },
+    async (args: Record<string, any>) => {
+      const path = tool.path(args);
+      const query: Record<string, any> = {};
+      for (const key of tool.queryParams ?? []) {
+        if (args[key] !== undefined) query[key] = args[key];
+      }
+
+      if (tool.method === "POST") {
+        const body: Record<string, unknown> = {};
+        for (const key of tool.bodyParams ?? []) {
+          if (args[key] !== undefined) body[key] = args[key];
+        }
+        return apiPost(path, body);
+      }
+      return apiGet(path, Object.keys(query).length ? query : undefined);
+    },
+  );
 }
 
 // ── Prompts ─────────────────────────────────────────────────

@@ -3,12 +3,12 @@
   "maintainers": ["kshvab"],
   "name": "competlab",
   "display_name": "CompetLab MCP Server",
-  "description": "Competitive intelligence for B2B SaaS — monitor competitors across 5 dimensions including AI Visibility (how ChatGPT, Claude, and Gemini rank your brand). 24 read-only MCP tools.",
+  "description": "Competitive intelligence for B2B SaaS — monitor competitors across 5 dimensions including AI Visibility (how ChatGPT, Claude, and Gemini rank your brand). 32 MCP tools: project dashboards, alerts, action plans, plus 8 free no-setup tools (sitemap, AI crawlers, tech stack, trust signals, agent adoption).",
   "repository": "https://github.com/competlab/competlab-mcp-server",
   "homepage": "https://competlab.com/developers/mcp",
   "author": "competlab",
   "license": "MIT",
-  "version": "1.0.3",
+  "version": "1.1.1",
   "categories": [
     "competitive-intelligence",
     "marketing",
@@ -33,12 +33,13 @@
     "type": "api-key",
     "header": "CL-API-Key"
   },
-  "tools_count": 24,
+  "tools_count": 32,
   "features": [
     "AI Visibility tracking across ChatGPT, Claude, and Gemini",
     "5-dimension competitive monitoring (Tech & Trust, Content, Positioning, Pricing, AI Visibility)",
     "AI-generated action plans with prioritized recommendations",
     "Historical trend data and monitoring schedules",
-    "Competitive change alerts with severity scoring"
+    "Competitive change alerts with severity scoring",
+    "Free no-setup tools: sitemap analysis, AI-crawler access check, tech-stack detection (117 rules), trust-signals analysis (34 signals), agent-adoption check (25 checks)"
   ]
 }

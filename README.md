@@ -7,7 +7,7 @@
 [![MCP](https://img.shields.io/badge/MCP-HTTP_%7C_stdio-7C3AED)](https://modelcontextprotocol.io)
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![24 Tools](https://img.shields.io/badge/Tools-24-brightgreen)](#available-tools)
+[![32 Tools](https://img.shields.io/badge/Tools-32-brightgreen)](#available-tools)
 
 [![Glama](https://glama.ai/mcp/servers/competlab/competlab-mcp-server/badges/score.svg)](https://glama.ai/mcp/servers/competlab/competlab-mcp-server)
 
@@ -209,7 +209,7 @@ AI Visibility is what makes CompetLab unique — no other CI platform tracks how
 
 ## Available Tools
 
-**10 groups. 24 tools. All read-only.**
+**11 groups. 32 tools.** 29 are read-only; 3 are async-scan starters that create a scan record (`start_tech_stack_scan`, `start_trust_signals_scan`, `start_agent_adoption_scan`).
 
 ### Projects & Competitors
 
@@ -270,6 +270,21 @@ AI Visibility is what makes CompetLab unique — no other CI platform tracks how
 | `list_alerts`     | Competitive change alerts — filterable by dimension, severity, and competitor                 |
 | `list_schedules`  | Monitoring schedules for all dimensions with enabled/disabled status and intervals            |
 
+### Free Tools (no project setup required)
+
+Run these against any public domain — no `projectId` needed. The sync tools return immediately; the async scans return a `scanId` you poll every 5–10 seconds.
+
+| Tool                        | Description                                                                                                              |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `check_sitemap`             | Live sitemap analysis — URL discovery, categorization by section, content gaps and depth                                 |
+| `check_ai_crawlers`         | Live AI-crawler access check via robots.txt + meta tags — GPTBot, ClaudeBot, Google-Extended, PerplexityBot, and others  |
+| `start_tech_stack_scan`     | Start async tech-stack detection (117 rules: tech / growth / engagement). Returns `scanId`                               |
+| `get_tech_stack_scan`       | Poll a tech-stack scan by `scanId` — returns detected technologies with confidence scores when complete                  |
+| `start_trust_signals_scan`  | Start async trust-signals analysis (34 signals across enterprise readiness, validation, social proof, authority, risk). Returns `scanId` |
+| `get_trust_signals_scan`    | Poll a trust-signals scan by `scanId` — returns per-signal verdicts and tier verdict when complete                       |
+| `start_agent_adoption_scan` | Start async Agent-Adoption Check (25 checks: discoverability, access, readability, agent endpoints). Returns `scanId`    |
+| `get_agent_adoption_scan`   | Poll an Agent-Adoption Check by `scanId` — returns complete results when finished                                        |
+
 All paginated tools accept `page` and `limit` parameters. Check `pagination.hasMore` in the response to fetch more pages.
 
 ## Example Prompts
@@ -283,6 +298,8 @@ Once connected, try asking your AI agent:
 - **"What critical alerts fired in the last 7 days?"**
 - **"Track how my AI visibility score changed over the last 3 months"**
 - **"Which competitors have better security headers than us?"**
+- **"Run a tech-stack scan on stripe.com — what are they using?"**
+- **"Check if openai.com blocks AI crawlers in their robots.txt"**
 
 See [examples/prompts.md](./examples/prompts.md) for more prompts organized by use case.
 
@@ -301,7 +318,7 @@ See [examples/prompts.md](./examples/prompts.md) for more prompts organized by u
 | **`CL-API-Key` header**       | Claude Code, Cursor, VS Code, Windsurf, Cline                     | `CL-API-Key: cl_live_...` |
 | **`api_key` query parameter** | Claude Desktop, Claude Web, clients without custom header support | `?api_key=cl_live_...`    |
 
-One API key covers your entire organization. All tools are read-only.
+One API key covers your entire organization. Most tools are read-only; the three `start_*_scan` tools create scan records under your account (no edits to existing data).
 
 ### Pricing
 

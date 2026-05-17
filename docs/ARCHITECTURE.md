@@ -19,7 +19,9 @@ High-level overview of the CompetLab MCP Server architecture.
 │  Server             │
 │  mcp.competlab.com  │
 │                     │
-│  24 read-only tools │
+│  32 tools           │
+│  (29 read-only +    │
+│   3 async-start)    │
 │  API key validation │
 │  Error handling     │
 └──────────┬──────────┘
