@@ -6,7 +6,7 @@ import { apiGet, apiPost } from "./api-client.js";
 
 const server = new McpServer({
   name: "competlab",
-  version: "1.1.1",
+  version: "1.2.0",
   description:
     "Competitive intelligence for B2B SaaS — monitor competitors across 5 dimensions including AI Visibility.",
 });

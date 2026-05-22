@@ -104,7 +104,7 @@ export const tools: ToolDef[] = [
   {
     name: "get_tech_trust_dashboard",
     description:
-      "Get the latest Tech & Trust Profile for all competitors. Returns security headers (grade A-F, HSTS, CSP, X-Frame-Options), trust signals (compliance, reviews, social proof, certifications — 24 signals in 4 categories), technology stack (47 tech, 43 growth, 27 engagement tools), robots.txt AI bot blocking status, DNS infrastructure, and AI analysis with insights and actions. Use this for the current snapshot; use get_tech_trust_history for past runs. Read-only. Returns JSON object.",
+      "Get the latest Tech & Trust Profile for all competitors. Returns security headers (grade A-F, HSTS, CSP, X-Frame-Options), trust signals (compliance, reviews, social proof, certifications — 24 signals in 4 categories), technology stack (47 tech, 43 growth, 27 engagement tools), robots.txt AI bot blocking status, DNS infrastructure, and AI analysis with insights and actions. Use this for the current snapshot; use get_tech_trust_history for past runs. Note: per-competitor `securityGrade` and `securityScore` may be `null` and `securitySignalsAvailable: { available: false, reason: 'site_uses_behavioral_protection' }` may appear when a competitor uses behavioral bot protection — treat as \"unscannable\" rather than failing. Read-only. Returns JSON object.",
     parameters: z.object({
       projectId: objectId("Project ID (from list_projects)"),
     }),
@@ -124,7 +124,7 @@ export const tools: ToolDef[] = [
   {
     name: "get_tech_trust_run_detail",
     description:
-      "Get full competitor-by-competitor Tech & Trust data for a specific historical run. Returns the same data structure as get_tech_trust_dashboard but for a past point in time. Use this to investigate what changed between runs or to audit a specific monitoring cycle. Requires runId from get_tech_trust_history. Read-only. Returns JSON object.",
+      "Get full competitor-by-competitor Tech & Trust data for a specific historical run. Returns the same data structure as get_tech_trust_dashboard but for a past point in time. Use this to investigate what changed between runs or to audit a specific monitoring cycle. Requires runId from get_tech_trust_history. Per-competitor security headers may carry `signalsAvailable: { available: false, reason: 'site_uses_behavioral_protection' }` for bot-protected targets. Read-only. Returns JSON object.",
     parameters: z.object({
       projectId: objectId("Project ID (from list_projects)"),
       runId: objectId("Run ID (from get_tech_trust_history)"),
@@ -388,7 +388,7 @@ export const tools: ToolDef[] = [
   {
     name: "get_tech_stack_scan",
     description:
-      "Retrieve status or full results of a tech-stack scan by scanId. Returns current status while running, detected technologies with confidence scores when complete. Recommended poll interval: 5-10 seconds. Read-only.",
+      "Retrieve status or full results of a tech-stack scan by scanId. Returns current status while running, detected technologies with confidence scores when complete. May include top-level `partialDetection: { headersAvailable: false, reason: 'site_uses_behavioral_protection' }` when the target uses behavioral bot protection — HTML-based detections (~85% of matchers) still fire, only header-derived hosting/CDN signals are missing. Recommended poll interval: 5-10 seconds. Read-only.",
     parameters: z.object({
       scanId: objectId("Scan ID (from start_tech_stack_scan)"),
     }),
@@ -410,7 +410,7 @@ export const tools: ToolDef[] = [
   {
     name: "get_trust_signals_scan",
     description:
-      "Retrieve status or full results of a trust-signals scan by scanId. Returns current status while running, per-signal verdicts and tier verdict when complete. Recommended poll interval: 5-10 seconds. Read-only.",
+      "Retrieve status or full results of a trust-signals scan by scanId. Returns current status while running, per-signal verdicts and tier verdict when complete. May include top-level `signalsAvailable: { available: false, reason: 'site_uses_behavioral_protection' }` when the target uses behavioral bot protection — in that case `verdict`, `signalsDetected`, `suspiciousPatterns`, and `gapsVsBenchmark` carry placeholder values (tier: 'minimal', score: 0) and the scan should be treated as unscannable; always check `signalsAvailable` first. Recommended poll interval: 5-10 seconds. Read-only.",
     parameters: z.object({
       scanId: objectId("Scan ID (from start_trust_signals_scan)"),
     }),
@@ -432,11 +432,65 @@ export const tools: ToolDef[] = [
   {
     name: "get_agent_adoption_scan",
     description:
-      "Retrieve status or full results of an Agent-Adoption Check by scanId. Returns current status while running, complete results when finished. Recommended poll interval: 5-10 seconds. Read-only.",
+      "Retrieve status or full results of an Agent-Adoption Check by scanId. Returns current status while running, complete results when finished. For bot-protected targets the `link-headers` and `cache-header-hygiene` checks emit `details.reason: 'site_uses_behavioral_protection'` with neutral messaging (scored: false, weight: 0 — no score impact). The counter `meta.counters.heavyFetchCalls` tracks heavy-fetch usage (renamed from `n8nCalls` as of 2026-05-22 — update consumers). Recommended poll interval: 5-10 seconds. Read-only.",
     parameters: z.object({
       scanId: objectId("Scan ID (from start_agent_adoption_scan)"),
     }),
     path: (a) => `/v1/tools/agent-adoption/scans/${a.scanId}`,
+    annotations: { readOnlyHint: true, openWorldHint: true },
+  },
+  {
+    name: "fetch_url",
+    description:
+      "Fetch any URL with automatic JS-rendering and common bot-protection handling — advanced behavioral fingerprinting may still block header retrieval (surfaced via `headersAvailable: false`). Returns body, headers, cleanStats. Optional `cleanHtml` strips HTML noise while preserving text content — token-cost win for LLM consumption.",
+    parameters: z.object({
+      url: z
+        .string()
+        .url()
+        .describe(
+          "Target URL. Must be http:// or https:// and resolve to a public host (IPv4/IPv6 literals and localhost are rejected).",
+        ),
+      bodyNeeded: z
+        .boolean()
+        .optional()
+        .describe("Include body + contentType in response. Default: true."),
+      headersNeeded: z
+        .boolean()
+        .optional()
+        .describe(
+          "Include headers + headersAvailable in response. Default: false. At least one of bodyNeeded or headersNeeded must be true.",
+        ),
+      cleanHtml: z
+        .boolean()
+        .optional()
+        .describe(
+          "Strip scripts/styles/comments from text/html responses. Requires bodyNeeded. Significant token-cost reduction for LLM consumption. Default: false.",
+        ),
+      maxTimeoutMs: z
+        .number()
+        .int()
+        .min(1000)
+        .max(120000)
+        .optional()
+        .describe("Caller timeout budget in ms. Range: 1000–120000."),
+      bodyMaxBytes: z
+        .number()
+        .int()
+        .min(1024)
+        .max(104857600)
+        .optional()
+        .describe("Per-request body cap in bytes. Range: 1024–104857600 (1 KiB–100 MiB)."),
+    }),
+    method: "POST",
+    path: () => "/v1/tools/fetch-url",
+    bodyParams: [
+      "url",
+      "bodyNeeded",
+      "headersNeeded",
+      "cleanHtml",
+      "maxTimeoutMs",
+      "bodyMaxBytes",
+    ],
     annotations: { readOnlyHint: true, openWorldHint: true },
   },
 ];

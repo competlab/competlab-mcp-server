@@ -7,7 +7,7 @@
 [![MCP](https://img.shields.io/badge/MCP-HTTP_%7C_stdio-7C3AED)](https://modelcontextprotocol.io)
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![32 Tools](https://img.shields.io/badge/Tools-32-brightgreen)](#available-tools)
+[![33 Tools](https://img.shields.io/badge/Tools-33-brightgreen)](#available-tools)
 
 [![Glama](https://glama.ai/mcp/servers/competlab/competlab-mcp-server/badges/score.svg)](https://glama.ai/mcp/servers/competlab/competlab-mcp-server)
 
@@ -209,7 +209,7 @@ AI Visibility is what makes CompetLab unique — no other CI platform tracks how
 
 ## Available Tools
 
-**11 groups. 32 tools.** 29 are read-only; 3 are async-scan starters that create a scan record (`start_tech_stack_scan`, `start_trust_signals_scan`, `start_agent_adoption_scan`).
+**11 groups. 33 tools.** 30 are read-only; 3 are async-scan starters that create a scan record (`start_tech_stack_scan`, `start_trust_signals_scan`, `start_agent_adoption_scan`).
 
 ### Projects & Competitors
 
@@ -284,6 +284,7 @@ Run these against any public domain — no `projectId` needed. The sync tools re
 | `get_trust_signals_scan`    | Poll a trust-signals scan by `scanId` — returns per-signal verdicts and tier verdict when complete                       |
 | `start_agent_adoption_scan` | Start async Agent-Adoption Check (25 checks: discoverability, access, readability, agent endpoints). Returns `scanId`    |
 | `get_agent_adoption_scan`   | Poll an Agent-Adoption Check by `scanId` — returns complete results when finished                                        |
+| `fetch_url`                 | Fetch any URL with JS rendering and bot-protection handling. Returns body, headers, cleanStats. Optional `cleanHtml` strips noise for LLM token-cost savings. 60 req/min per API key |
 
 All paginated tools accept `page` and `limit` parameters. Check `pagination.hasMore` in the response to fetch more pages.
 
@@ -300,6 +301,7 @@ Once connected, try asking your AI agent:
 - **"Which competitors have better security headers than us?"**
 - **"Run a tech-stack scan on stripe.com — what are they using?"**
 - **"Check if openai.com blocks AI crawlers in their robots.txt"**
+- **"Fetch g2.com/some-listing with cleanHtml and summarize the page"**
 
 See [examples/prompts.md](./examples/prompts.md) for more prompts organized by use case.
 
@@ -318,7 +320,7 @@ See [examples/prompts.md](./examples/prompts.md) for more prompts organized by u
 | **`CL-API-Key` header**       | Claude Code, Cursor, VS Code, Windsurf, Cline                     | `CL-API-Key: cl_live_...` |
 | **`api_key` query parameter** | Claude Desktop, Claude Web, clients without custom header support | `?api_key=cl_live_...`    |
 
-One API key covers your entire organization. Most tools are read-only; the three `start_*_scan` tools create scan records under your account (no edits to existing data).
+One API key covers your entire organization. Most tools are read-only; the three `start_*_scan` tools create scan records under your account (no edits to existing data). The `fetch_url` tool is rate-limited at 60 req/min per API key (tighter than the 1000/min default for other free tools).
 
 ### Pricing
 
