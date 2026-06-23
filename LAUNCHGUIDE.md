@@ -33,17 +33,17 @@ Structured metadata for MCP directories and marketplace submissions.
 
 ### Short Description (190 chars)
 
-> CompetLab monitors competitors across 5 dimensions including AI Visibility — tracking how ChatGPT, Claude, and Gemini mention and rank brands. 33 MCP tools for dashboards, alerts, action plans, plus 9 free no-setup tools (sitemap, AI crawlers, tech stack, trust signals, agent adoption, URL fetch).
+> CompetLab monitors competitors across 5 dimensions including AI Visibility — tracking how ChatGPT, Claude, and Gemini mention and rank brands. 33 MCP tools for dashboards, alerts, strategic briefings, plus 9 free no-setup tools (sitemap, AI crawlers, tech stack, trust signals, agent adoption, URL fetch).
 
 ### Medium Description (500 chars)
 
-> CompetLab MCP Server gives AI agents access to competitive intelligence data across 5 dimensions: Tech & Trust, Content, Positioning, Pricing, and AI Visibility. The unique AI Visibility dimension tracks how ChatGPT, Claude, and Gemini mention and rank brands in response to industry queries — no other CI platform does this. 33 tools covering project management, competitor analysis, dimension dashboards, historical data, alerts, action plans, scheduling, and 9 free no-setup tools (sitemap, AI crawlers, tech stack, trust signals, agent adoption, URL fetch with JS rendering). Built for B2B SaaS teams who need CI integrated into their AI workflows.
+> CompetLab MCP Server gives AI agents access to competitive intelligence data across 5 dimensions: Tech & Trust, Content, Positioning, Pricing, and AI Visibility. The unique AI Visibility dimension tracks how ChatGPT, Claude, and Gemini mention and rank brands in response to industry queries — no other CI platform does this. 33 tools covering project management, competitor analysis, dimension dashboards, historical data, alerts, strategic briefings, scheduling, and 9 free no-setup tools (sitemap, AI crawlers, tech stack, trust signals, agent adoption, URL fetch with JS rendering). Built for B2B SaaS teams who need CI integrated into their AI workflows.
 
 ### Long Description (for G2, Capterra, full directory profiles)
 
 CompetLab is a competitive intelligence platform for B2B SaaS companies. It monitors 5 dimensions across your competitors: Tech & Trust Profile, Content Intelligence, Positioning, Pricing Intelligence, and AI Visibility.
 
-The MCP server exposes 33 tools that let AI agents access the full CompetLab platform: manage projects and competitors, pull dashboard data across all 5 dimensions, review historical trends, check alerts, get AI-generated action plans, manage monitoring schedules, and run 9 free no-setup tools against any public domain (sitemap analysis, AI-crawler access checks, tech-stack detection, trust-signals analysis, agent-adoption checks, URL fetch with JS rendering).
+The MCP server exposes 33 tools that let AI agents access the full CompetLab platform: manage projects and competitors, pull dashboard data across all 5 dimensions, review historical trends, check alerts, get the AI-generated strategic briefing, manage monitoring schedules, and run 9 free no-setup tools against any public domain (sitemap analysis, AI-crawler access checks, tech-stack detection, trust-signals analysis, agent-adoption checks, URL fetch with JS rendering).
 
 What makes CompetLab unique is the AI Visibility dimension — it tracks how large language models (OpenAI, Claude, Gemini) mention and rank brands in response to industry queries. As buyers increasingly use AI assistants for vendor research, knowing how you appear in AI responses is becoming critical. No other CI platform monitors this.
 
@@ -53,7 +53,7 @@ What makes CompetLab unique is the AI Visibility dimension — it tracks how lar
 - Pull real-time dashboards for pricing, content, positioning, tech trust, and AI visibility
 - Access historical monitoring data and trends
 - Review alerts with severity scoring and actionable recommendations
-- Get AI-generated action plans based on competitive gaps
+- Get the AI-generated strategic briefing — synthesized insights and prioritized actions across all dimensions
 - Manage monitoring schedules
 
 Built for product marketers, competitive intelligence analysts, and growth teams at B2B SaaS companies who want CI data flowing into their AI-powered workflows.
@@ -70,11 +70,11 @@ Built for product marketers, competitive intelligence analysts, and growth teams
 
 2. **"How does ChatGPT rank my brand vs competitors for [industry query]?"** — Use AI Visibility tools to see exactly how LLMs perceive and recommend your brand.
 
-3. **"Show me the action plan — what should I fix first?"** — Get AI-generated prioritized recommendations across all 5 dimensions.
+3. **"Show me the strategic briefing — what should I fix first?"** — Get AI-generated prioritized recommendations across all 5 dimensions.
 
 4. **"Compare content strategies across all tracked competitors"** — Pull content dashboards and changelogs to see who's publishing what.
 
-5. **"Build me a weekly competitive briefing for the team"** — Combine alerts, dashboards, and action plans into a structured report.
+5. **"Build me a weekly competitive briefing for the team"** — Combine alerts, dashboards, and the strategic briefing into a structured report.
 
 ---
 

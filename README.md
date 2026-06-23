@@ -13,7 +13,7 @@
 
 > Competitive intelligence for AI agents — see how LLMs rank your brand.
 
-More B2B buyers are asking AI before they Google. CompetLab monitors competitors across 5 dimensions — including **AI Visibility**, which tracks how ChatGPT, Claude, and Gemini mention and rank brands. This MCP server gives your AI agent access to all of it: dashboards, historical data, alerts, and action plans. No other CI platform does this.
+More B2B buyers are asking AI before they Google. CompetLab monitors competitors across 5 dimensions — including **AI Visibility**, which tracks how ChatGPT, Claude, and Gemini mention and rank brands. This MCP server gives your AI agent access to all of it: dashboards, historical data, alerts, and strategic briefings. No other CI platform does this.
 
 ## Supported Clients
 
@@ -262,11 +262,11 @@ AI Visibility is what makes CompetLab unique — no other CI platform tracks how
 | `get_ai_visibility_check_detail` | Full detail for a specific check with per-competitor rankings                                    |
 | `get_ai_visibility_trend`        | Track how LLM brand perception changes over time (up to 200 data points, filterable by provider) |
 
-### Analysis, Alerts & Schedules
+### Strategic Briefing, Alerts & Schedules
 
-| Tool              | Description                                                                                   |
-| ----------------- | --------------------------------------------------------------------------------------------- |
-| `get_action_plan` | AI-generated competitive action plan across all 5 dimensions with prioritized recommendations |
+| Tool                     | Description                                                                                   |
+| ------------------------ | --------------------------------------------------------------------------------------------- |
+| `get_strategic_briefing` | Synthesized competitive briefing across all dimensions — what changed, what it means, what to do. Defaults to the `hub` digest; pass `sections` to drill into `deep-<dimension>` slots |
 | `list_alerts`     | Competitive change alerts — filterable by dimension, severity, and competitor                 |
 | `list_schedules`  | Monitoring schedules for all dimensions with enabled/disabled status and intervals            |
 
@@ -294,7 +294,7 @@ Once connected, try asking your AI agent:
 
 - **"What changed on my competitors' pricing pages this week?"**
 - **"How does ChatGPT rank my brand vs competitors for [industry query]?"**
-- **"Show me the action plan — what should I fix first?"**
+- **"Show me the strategic briefing — what should I fix first?"**
 - **"Compare content strategies across all my tracked competitors"**
 - **"What critical alerts fired in the last 7 days?"**
 - **"Track how my AI visibility score changed over the last 3 months"**

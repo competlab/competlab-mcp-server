@@ -324,15 +324,53 @@ export const tools: ToolDef[] = [
     path: (a) => `/v1/projects/${a.projectId}/schedules`,
   },
 
-  // ── Analysis ──────────────────────────────────────────────
+  // ── Strategic Briefing ────────────────────────────────────
   {
-    name: "get_action_plan",
+    name: "get_strategic_briefing",
     description:
-      "Get the AI-generated competitive action plan aggregated across all 5 monitoring dimensions. Returns insights (with evidence and related competitors) and recommended actions (with rationale), plus per-dimension analysis freshness timestamps. This is the highest-level intelligence output — start here for a strategic overview before drilling into specific dimensions. Read-only. Returns JSON object.",
+      "Get the project's Strategic Briefing — the synthesized, prioritized competitive read across all dimensions: what changed, what it means, and what to do about it. This is the ANALYZED, as-of intelligence output, NOT raw monitoring — for live per-dimension data use the get_<dimension>_dashboard tools (e.g. get_pricing_dashboard), and for the monitored-competitor roster use list_competitors. " +
+      "Defaults to the executive 'hub' section — a cheap digest (headline, top moves, and per-dimension verdicts that each name the deeper 'deep-<dimension>' section to open next) that answers most questions in a single call; this is the intended hub→deep drill-down flow, so request additional 'sections' only when a question actually needs them. " +
+      "Always branch on meta.availability before reading: 'ready' (a finished briefing is returned), 'ready-refreshing' (a finished briefing is returned AND a newer edition is generating right now), 'preparing' (the first edition is still building, so item is null), 'none' (no briefing exists yet). Only the latest FINISHED edition is ever returned; briefings regenerate automatically per project roughly every 30 days. " +
+      "meta, coverage, and dimensionHealth are returned regardless of which sections you request — read 'coverage' (methodology + honest-degradation caveats) before quoting any number, and check 'dimensionHealth' to see which deep-<dimension> analyses this edition actually contains (a skipped dimension reads as 'absent', never as an empty finding). A missing/inaccessible project returns 404 project_not_found; the briefing lifecycle itself never 404s. " +
+      "Read-only. Returns a JSON briefing envelope { item (nullable), meta: { runId, briefingDate, availability }, coverage (nullable), dimensionHealth }.",
     parameters: z.object({
       projectId: objectId("Project ID (from list_projects)"),
+      sections: z
+        .array(
+          z.enum([
+            "hub",
+            "actions",
+            "competitors",
+            "deep-ai-visibility",
+            "deep-positioning",
+            "deep-pricing",
+            "deep-content",
+            "deep-tech-trust",
+            "deep-agent-readiness",
+            "deep-ai-ecosystem",
+            "deep-customer-voice",
+            "deep-funding-capital",
+            "deep-hiring-gtm",
+            "deep-landscape",
+            "deep-product-launches",
+            "deep-reliability-status",
+            "all",
+          ]),
+        )
+        .optional()
+        .describe(
+          "Which briefing sections to return. Default ['hub'] — the executive digest that orients you and names the deeper sections by their verdicts; this alone answers most questions in one cheap call. Add sections only when the question needs them: 'actions' (the prioritized to-do list), 'competitors' (the rival-by-rival read), any 'deep-<dimension>' for a full dimension dive (13 available, e.g. 'deep-pricing', 'deep-ai-visibility' — the hub's verdicts tell you which one to open, so you needn't guess), or 'all' for the entire briefing (large — full-read/export only).",
+        ),
+      includeCharts: z
+        .boolean()
+        .optional()
+        .describe(
+          "Default false — sections return prose plus a compact data-summary of each chart. Set true to include full chart series (time-series points, bar values); larger payload — use only when you need the underlying numbers, e.g. to reason over a trend.",
+        ),
     }),
-    path: (a) => `/v1/projects/${a.projectId}/analysis/action-plan`,
+    path: (a) => `/v1/projects/${a.projectId}/strategic-briefing`,
+    queryParams: ["sections", "includeCharts"],
+    annotations: { readOnlyHint: true, openWorldHint: false },
   },
 
   // ── Free Tools (no project context required) ──────────────

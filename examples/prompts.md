@@ -22,13 +22,13 @@ Once CompetLab MCP is connected, try these prompts with your AI agent. All promp
 
 > "Which competitor has the highest mention rate across all LLMs?"
 
-## Competitive Action Plan
+## Strategic Briefing
 
-> "Show me the action plan — what should I fix first?"
+> "Show me the strategic briefing — what should I fix first?"
 
 > "What are the top competitive threats I should address this week?"
 
-> "Give me the full action plan with evidence and affected competitors"
+> "Give me the full strategic briefing — pull the actions and competitor sections"
 
 ## Pricing Intelligence
 

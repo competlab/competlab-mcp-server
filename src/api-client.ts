@@ -39,7 +39,7 @@ function unreachable(err: unknown): McpResponse {
 
 export async function apiGet(
   path: string,
-  query?: Record<string, string | number>,
+  query?: Record<string, string | number | boolean | Array<string | number>>,
 ): Promise<McpResponse> {
   const apiKey = process.env.COMPETLAB_API_KEY;
   if (!apiKey) return missingKey();
@@ -47,7 +47,12 @@ export async function apiGet(
   const url = new URL(`${API_BASE}${path}`);
   if (query) {
     for (const [k, v] of Object.entries(query)) {
-      if (v !== undefined) url.searchParams.set(k, String(v));
+      if (v === undefined) continue;
+      // Array params (e.g. `sections`) are sent comma-joined. The backend also accepts repeated
+      // (?k=a&k=b) and single values — see GetBriefingQueryDto — so this is just the simplest form.
+      const value = Array.isArray(v) ? v.join(",") : String(v);
+      if (value === "") continue; // skip empty arrays / empty strings
+      url.searchParams.set(k, value);
     }
   }
 

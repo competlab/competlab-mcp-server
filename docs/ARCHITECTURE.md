@@ -19,8 +19,8 @@ High-level overview of the CompetLab MCP Server architecture.
 │  Server             │
 │  mcp.competlab.com  │
 │                     │
-│  32 tools           │
-│  (29 read-only +    │
+│  33 tools           │
+│  (30 read-only +    │
 │   3 async-start)    │
 │  API key validation │
 │  Error handling     │
@@ -97,7 +97,7 @@ Common error codes:
 - **Competitors** are identified by domain and include monitored page URLs
 - **Dimensions** (Tech & Trust, Content, Positioning, Pricing, AI Visibility) each have their own dashboard, history, and run/check detail endpoints
 - **Alerts** are generated automatically when competitive changes are detected
-- **Action Plans** are AI-generated insights aggregated across all dimensions
+- **Strategic Briefings** are AI-generated, synthesized competitive reads across all dimensions — what changed, what it means, and what to do
 - **Schedules** control the monitoring frequency for each dimension
 
 All IDs are 24-character hex strings (MongoDB ObjectIds).

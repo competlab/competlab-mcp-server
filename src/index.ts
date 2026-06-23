@@ -6,7 +6,7 @@ import { apiGet, apiPost } from "./api-client.js";
 
 const server = new McpServer({
   name: "competlab",
-  version: "1.2.0",
+  version: "2.0.0",
   description:
     "Competitive intelligence for B2B SaaS — monitor competitors across 5 dimensions including AI Visibility.",
 });
@@ -44,7 +44,7 @@ for (const tool of tools) {
 
 server.prompt(
   "competitive_overview",
-  "Get a full competitive briefing for a project — action plan, alerts, and all 5 dimension dashboards in one go.",
+  "Get a full competitive briefing for a project — strategic briefing, alerts, and all 5 dimension dashboards in one go.",
   { projectId: z.string().describe("Project ID (from list_projects)") },
   async ({ projectId }) => ({
     messages: [
@@ -56,7 +56,7 @@ server.prompt(
             `Give me a comprehensive competitive briefing for project ${projectId}.`,
             "",
             "Follow this workflow:",
-            "1. Call get_action_plan to get the strategic overview with insights and recommended actions.",
+            "1. Call get_strategic_briefing (sections defaults to the 'hub' digest) for the strategic overview — insights and recommended actions.",
             "2. Call list_alerts (limit 10, severity critical or high) to surface the most important recent changes.",
             "3. Call each dashboard tool for the full picture:",
             "   - get_tech_trust_dashboard (security, trust signals, tech stack)",
