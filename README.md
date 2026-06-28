@@ -266,7 +266,7 @@ AI Visibility is what makes CompetLab unique — no other CI platform tracks how
 
 | Tool                     | Description                                                                                   |
 | ------------------------ | --------------------------------------------------------------------------------------------- |
-| `get_strategic_briefing` | Synthesized competitive briefing across all dimensions — what changed, what it means, what to do. Defaults to the `hub` digest; pass `sections` to drill into `deep-<dimension>` slots |
+| `get_briefing` | Synthesized competitive briefing across all dimensions — what changed, what it means, what to do. Defaults to the `hub` digest; pass `sections` to drill into `deep-<dimension>` slots |
 | `list_alerts`     | Competitive change alerts — filterable by dimension, severity, and competitor                 |
 | `list_schedules`  | Monitoring schedules for all dimensions with enabled/disabled status and intervals            |
 

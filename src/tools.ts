@@ -326,7 +326,7 @@ export const tools: ToolDef[] = [
 
   // ── Strategic Briefing ────────────────────────────────────
   {
-    name: "get_strategic_briefing",
+    name: "get_briefing",
     description:
       "Get the project's Strategic Briefing — the synthesized, prioritized competitive read across all dimensions: what changed, what it means, and what to do about it. This is the ANALYZED, as-of intelligence output, NOT raw monitoring — for live per-dimension data use the get_<dimension>_dashboard tools (e.g. get_pricing_dashboard), and for the monitored-competitor roster use list_competitors. " +
       "Defaults to the executive 'hub' section — a cheap digest (headline, top moves, and per-dimension verdicts that each name the deeper 'deep-<dimension>' section to open next) that answers most questions in a single call; this is the intended hub→deep drill-down flow, so request additional 'sections' only when a question actually needs them. " +
