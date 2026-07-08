@@ -79,7 +79,7 @@ export const tools: ToolDef[] = [
   {
     name: "list_alerts",
     description:
-      "Get paginated competitive alerts — detected changes across all monitored dimensions. Filter by dimension (tech-trust, content, positioning, pricing, ai-visibility), severity (critical, high, medium, info), and/or competitorId. Alerts include change diffs and action hints. Use this to find recent competitive changes before diving into specific dimension dashboards. Read-only. Returns paginated JSON array with pagination.hasMore flag.",
+      "Get paginated competitive alerts — detected changes across all monitored dimensions. Filter by dimension (tech-trust, content, positioning, pricing, ai-visibility), severity (critical, high, medium, info), and/or competitorId. Each alert includes an action hint plus a `context` object keyed by its dimension slug (e.g. a pricing alert has a `pricing` key, so you can index context[dimension]); context is always present (an empty object when there is no extra detail) and holds field-level changes with previousValue/currentValue pairs — ai-visibility alerts instead carry a scoreShift with scoreFrom/scoreTo. Use this to find recent competitive changes before diving into specific dimension dashboards. Read-only. Returns paginated JSON array with pagination.hasMore flag.",
     parameters: z.object({
       projectId: objectId("Project ID (from list_projects)"),
       ...pagination,
