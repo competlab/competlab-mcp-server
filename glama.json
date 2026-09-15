@@ -3,12 +3,12 @@
   "maintainers": ["kshvab"],
   "name": "competlab",
   "display_name": "CompetLab MCP Server",
-  "description": "Competitive intelligence for B2B SaaS — monitor competitors across 5 dimensions including AI Visibility (how ChatGPT, Claude, and Gemini rank your brand). 33 MCP tools: project dashboards, alerts, strategic briefings, plus 9 free no-setup tools (sitemap, AI crawlers, tech stack, trust signals, agent adoption, URL fetch with JS rendering).",
+  "description": "Competitive intelligence for B2B SaaS — see where AI sends your buyers. 6 monitored dimensions, including AI Visibility (which brands ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews recommend) and AI Sources (the pages Perplexity and Google AI Overviews read, and whether you are on them). 38 MCP tools: project dashboards, alerts, the Strategic Briefing and its past editions, plus 9 free no-setup tools (sitemap, AI crawlers, tech stack, trust signals, agent adoption, URL fetch with JS rendering).",
   "repository": "https://github.com/competlab/competlab-mcp-server",
   "homepage": "https://competlab.com/developers/mcp",
   "author": "competlab",
   "license": "MIT",
-  "version": "2.0.2",
+  "version": "3.0.0",
   "categories": [
     "competitive-intelligence",
     "marketing",
@@ -25,6 +25,8 @@
     "chatgpt",
     "claude",
     "gemini",
+    "perplexity",
+    "google-ai-overviews",
     "mcp-server"
   ],
   "transport": "stdio",
@@ -33,13 +35,14 @@
     "type": "api-key",
     "header": "CL-API-Key"
   },
-  "tools_count": 33,
+  "tools_count": 38,
   "features": [
-    "AI Visibility tracking across ChatGPT, Claude, and Gemini",
-    "5-dimension competitive monitoring (Tech & Trust, Content, Positioning, Pricing, AI Visibility)",
-    "AI-generated strategic briefings with prioritized insights and actions",
+    "AI Visibility market map across ChatGPT, Claude, Gemini, Perplexity, and Google AI Overviews — which brands each recommends, and how often",
+    "AI Sources — the pages Perplexity and Google AI Overviews read when they answer your buyers' questions, and whether you are on them",
+    "6 monitored dimensions (AI Visibility, AI Sources, Positioning, Pricing, Content, Tech & Trust); the Strategic Briefing covers 14",
+    "AI-generated Strategic Briefing with prioritized insights and actions, plus its past editions",
     "Historical trend data and monitoring schedules",
     "Competitive change alerts with severity scoring",
-    "Free no-setup tools: sitemap analysis, AI-crawler access check, tech-stack detection (117 rules), trust-signals analysis (34 signals), agent-adoption check (25 checks), URL fetch with JS rendering and HTML cleanup"
+    "Free no-setup tools: sitemap analysis, AI-crawler access check, tech-stack detection (117 rules), trust-signals analysis (34 signals), Agent Adoption Check (25 checks), URL fetch with JS rendering and HTML cleanup"
   ]
 }

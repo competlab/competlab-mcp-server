@@ -19,8 +19,8 @@ High-level overview of the CompetLab MCP Server architecture.
 │  Server             │
 │  mcp.competlab.com  │
 │                     │
-│  33 tools           │
-│  (30 read-only +    │
+│  38 tools           │
+│  (35 read-only +    │
 │   3 async-start)    │
 │  API key validation │
 │  Error handling     │
@@ -90,14 +90,16 @@ Common error codes:
 | `project_not_found` | 404 | Project ID doesn't exist in your workspace |
 | `competitor_not_found` | 404 | Competitor ID doesn't exist in the specified project |
 | `rate_limit_exceeded` | 429 | Too many requests — retry after the indicated period |
+| `run_not_summarized` | 404 | The run exists but produced no summary — it has nothing to report, which is different from not existing |
+| `api_unreachable` | 503 | The MCP server could not reach the CompetLab API |
 
 ## Data Model
 
-- **Projects** contain competitors and monitoring data across 5 dimensions
+- **Projects** contain competitors and monitoring data across 6 monitored dimensions
 - **Competitors** are identified by domain and include monitored page URLs
-- **Dimensions** (Tech & Trust, Content, Positioning, Pricing, AI Visibility) each have their own dashboard, history, and run/check detail endpoints
+- **Dimensions** (AI Visibility, AI Sources, Positioning, Pricing, Content, Tech & Trust) each have their own dashboard, history, and run/check detail endpoints
 - **Alerts** are generated automatically when competitive changes are detected
-- **Strategic Briefings** are AI-generated, synthesized competitive reads across all dimensions — what changed, what it means, and what to do
+- **Strategic Briefings** are AI-generated, synthesized competitive reads across 14 dimensions — the 6 monitored ones plus 8 researched for the briefing alone: what changed, what it means, and what to do. Past editions stay readable
 - **Schedules** control the monitoring frequency for each dimension
 
 All IDs are 24-character hex strings (MongoDB ObjectIds).

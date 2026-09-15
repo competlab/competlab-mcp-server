@@ -2,7 +2,7 @@
 
 ## Scope & Permissions
 
-**30 of 33 MCP tools are read-only** — they cannot create, update, or delete CompetLab data. The 3 exceptions (`start_tech_stack_scan`, `start_trust_signals_scan`, `start_agent_adoption_scan`) create a new scan record under your account when you ask for an async free-tool scan; they never modify existing projects, competitors, or settings.
+**35 of 38 MCP tools are read-only** — they cannot create, update, or delete CompetLab data. The 3 exceptions (`start_tech_stack_scan`, `start_trust_signals_scan`, `start_agent_adoption_scan`) create a new scan record under your account when you ask for an async free-tool scan; they never modify existing projects, competitors, or settings.
 
 ## Authentication
 

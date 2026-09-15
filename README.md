@@ -7,13 +7,13 @@
 [![MCP](https://img.shields.io/badge/MCP-HTTP_%7C_stdio-7C3AED)](https://modelcontextprotocol.io)
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![33 Tools](https://img.shields.io/badge/Tools-33-brightgreen)](#available-tools)
+[![38 Tools](https://img.shields.io/badge/Tools-38-brightgreen)](#available-tools)
 
 [![Glama](https://glama.ai/mcp/servers/competlab/competlab-mcp-server/badges/score.svg)](https://glama.ai/mcp/servers/competlab/competlab-mcp-server)
 
-> Competitive intelligence for AI agents — see how LLMs rank your brand.
+> Competitive intelligence for AI agents — see where AI sends your buyers, and what to do about it.
 
-More B2B buyers are asking AI before they Google. CompetLab monitors competitors across 5 dimensions — including **AI Visibility**, which tracks how ChatGPT, Claude, and Gemini mention and rank brands. This MCP server gives your AI agent access to all of it: dashboards, historical data, alerts, and strategic briefings. No other CI platform does this.
+More B2B buyers are asking AI before they Google. CompetLab monitors competitors across 6 dimensions — including **AI Visibility**, which tracks which brands ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews recommend, and **AI Sources**, the pages Perplexity and Google AI Overviews read when they answer your buyers' questions. This MCP server gives your AI agent access to all of it: dashboards, historical data, alerts, and the Strategic Briefing. No other CI platform does this.
 
 ## Supported Clients
 
@@ -193,23 +193,24 @@ See [examples/](./examples/) for ready-to-paste config files for each client.
 
 ## What is CompetLab?
 
-Competitive intelligence for the AI era. One platform, 5 dimensions, monitored automatically:
+Competitive intelligence for the AI era: 14 dimensions — 6 monitored continuously, plus 8 leading-edge dimensions researched for the monthly Strategic Briefing. The six monitored dimensions:
 
-| Dimension         | What It Tracks                                                                                                    |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------- |
-| **Tech & Trust**  | Tech stacks, security headers (grade A-F), trust signals (24 signals in 4 categories), robots.txt AI bot blocking |
-| **Content**       | Sitemap analysis, content categorization (11 categories), URL changelog, content gaps                             |
-| **Positioning**   | Homepage messaging, value props, CTAs, target audience, differentiators                                           |
-| **Pricing**       | Plans, billing models, free tiers, enterprise pricing, gap analysis                                               |
-| **AI Visibility** | How ChatGPT, Claude, and Gemini rank your brand vs competitors (AI Visibility Score 0-100)                        |
+| Dimension         | What It Tracks                                                                                                                             |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| **AI Visibility** | Which companies ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews recommend in your category, how often each is named, and where you stand |
+| **AI Sources**    | The pages Perplexity and Google AI Overviews read when they answer your buyers' questions, and whether you are on them                   |
+| **Positioning**   | Homepage messaging, value props, CTAs, target audience, differentiators                                                                    |
+| **Pricing**       | Plans, billing models, free tiers, market pricing statistics, gap analysis                                                                 |
+| **Content**       | Sitemap analysis, content categorization (12 categories), URL changelog, content gaps                                                      |
+| **Tech & Trust**  | Tech stacks, security headers (grade A-F), trust signals (26 signals in 5 categories), per-assistant AI access                            |
 
-AI Visibility is what makes CompetLab unique — no other CI platform tracks how LLMs recommend brands in real time.
+AI Visibility is what makes CompetLab unique — no other CI platform tracks which brands AI models recommend. AI Sources is its companion: the pages Perplexity and Google AI Overviews retrieve on the way to those answers, and whether they name you.
 
 > [Start free trial](https://app.competlab.com/register) (14 days, no credit card) | [Learn more](https://competlab.com)
 
 ## Available Tools
 
-**11 groups. 33 tools.** 30 are read-only; 3 are async-scan starters that create a scan record (`start_tech_stack_scan`, `start_trust_signals_scan`, `start_agent_adoption_scan`).
+**38 tools.** 35 are read-only; 3 are async-scan starters that create a scan record (`start_tech_stack_scan`, `start_trust_signals_scan`, `start_agent_adoption_scan`).
 
 ### Projects & Competitors
 
@@ -220,22 +221,22 @@ AI Visibility is what makes CompetLab unique — no other CI platform tracks how
 | `list_competitors` | List all monitored competitors (includes your own domain for comparison)      |
 | `get_competitor`   | Get competitor details including monitored page URLs                          |
 
-### Tech & Trust Profile
+### AI Visibility
 
-| Tool                        | Description                                                                   |
-| --------------------------- | ----------------------------------------------------------------------------- |
-| `get_tech_trust_dashboard`  | Latest security headers, trust signals, tech stacks, DNS, robots.txt analysis |
-| `get_tech_trust_history`    | Paginated history of monitoring runs                                          |
-| `get_tech_trust_run_detail` | Full competitor-by-competitor data for a specific run                         |
+| Tool                             | Description                                                                                                                                                                  |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `get_ai_visibility_dashboard`    | The market map — which companies the AI models recommend in your category, and whether you are one of them — with per-model breakdowns; optionally the models' raw answers |
+| `get_ai_visibility_history`      | Paginated history of AI Visibility checks                                                                                                                                    |
+| `get_ai_visibility_check_detail` | Full detail for one check, and optionally what each model actually said — filterable by competitor, model, or prompt                                                        |
+| `get_ai_visibility_trend`        | How the market the AI models draw has moved over a window — each company's reading now and at the start, and the difference; readable per AI model                         |
 
-### Content Intelligence
+### AI Sources
 
-| Tool                     | Description                                                                                  |
-| ------------------------ | -------------------------------------------------------------------------------------------- |
-| `get_content_dashboard`  | Latest sitemap analysis, content categorization, strategic URLs, gap analysis                |
-| `get_content_history`    | Paginated history of monitoring runs                                                         |
-| `get_content_run_detail` | Full data for a specific content run                                                         |
-| `get_content_changelog`  | Detected URL changes over time (new, removed, moved) — filterable by competitor and category |
+| Tool                          | Description                                                                                                                                                                  |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `get_ai_sources_dashboard`    | The pages Perplexity and Google AI Overviews read when they answer the project's buying questions, per engine — which companies each named, which pages it retrieved, and the pages naming competitors and not you |
+| `get_ai_sources_history`      | Paginated history of AI Sources checks                                                                                                                                       |
+| `get_ai_sources_check_detail` | Full detail for one AI Sources check, and optionally every answer and retrieved page — filterable by engine or question                                                     |
 
 ### Positioning
 
@@ -253,22 +254,37 @@ AI Visibility is what makes CompetLab unique — no other CI platform tracks how
 | `get_pricing_history`    | Paginated history of monitoring runs                                   |
 | `get_pricing_run_detail` | Full data for a specific pricing run                                   |
 
-### AI Visibility
+### Content Intelligence
 
-| Tool                             | Description                                                                                      |
-| -------------------------------- | ------------------------------------------------------------------------------------------------ |
-| `get_ai_visibility_dashboard`    | AI Visibility Scores, mention rates, per-provider breakdowns (OpenAI, Claude, Gemini)            |
-| `get_ai_visibility_history`      | Paginated history of AI visibility checks                                                        |
-| `get_ai_visibility_check_detail` | Full detail for a specific check with per-competitor rankings                                    |
-| `get_ai_visibility_trend`        | Track how LLM brand perception changes over time (up to 200 data points, filterable by provider) |
+| Tool                     | Description                                                                                  |
+| ------------------------ | -------------------------------------------------------------------------------------------- |
+| `get_content_dashboard`  | Latest sitemap analysis, content categorization, strategic URLs, gap analysis                |
+| `get_content_history`    | Paginated history of monitoring runs                                                         |
+| `get_content_run_detail` | Full data for a specific content run                                                         |
+| `get_content_changelog`  | Detected URL changes over time (added, removed) — filterable by competitor and category     |
 
-### Strategic Briefing, Alerts & Schedules
+### Tech & Trust Profile
 
-| Tool                     | Description                                                                                   |
-| ------------------------ | --------------------------------------------------------------------------------------------- |
-| `get_briefing` | Synthesized competitive briefing across all dimensions — what changed, what it means, what to do. Defaults to the `hub` digest; pass `sections` to drill into `deep-<dimension>` slots |
-| `list_alerts`     | Competitive change alerts — filterable by dimension, severity, and competitor                 |
-| `list_schedules`  | Monitoring schedules for all dimensions with enabled/disabled status and intervals            |
+| Tool                        | Description                                                                          |
+| --------------------------- | ------------------------------------------------------------------------------------ |
+| `get_tech_trust_dashboard`  | Latest security headers, trust signals, tech stacks, DNS, and per-assistant AI access |
+| `get_tech_trust_history`    | Paginated history of monitoring runs                                                 |
+| `get_tech_trust_run_detail` | Full competitor-by-competitor data for a specific run                                |
+
+### Strategic Briefing
+
+| Tool                   | Description                                                                                                                                                              |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `get_briefing`         | Current state of the project's Strategic Briefing — what changed, what it means, and what to do. Defaults to the `hub` digest; pass `sections` to open any of the 14 `deep-<dimension>` sections |
+| `get_briefing_history` | Past briefing editions, newest first — publication date, status and headline verdict per edition                                                                         |
+| `get_briefing_edition` | One past briefing edition in full, by run ID                                                                                                                             |
+
+### Alerts & Schedules
+
+| Tool             | Description                                                                   |
+| ---------------- | ----------------------------------------------------------------------------- |
+| `list_alerts`    | Competitive change alerts — filterable by dimension, severity, and competitor |
+| `list_schedules` | Monitoring schedules for all 6 monitored dimensions, with status and intervals |
 
 ### Free Tools (no project setup required)
 
@@ -276,31 +292,34 @@ Run these against any public domain — no `projectId` needed. The sync tools re
 
 | Tool                        | Description                                                                                                              |
 | --------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `check_sitemap`             | Live sitemap analysis — URL discovery, categorization by section, content gaps and depth                                 |
-| `check_ai_crawlers`         | Live AI-crawler access check via robots.txt + meta tags — GPTBot, ClaudeBot, Google-Extended, PerplexityBot, and others  |
+| `check_sitemap`             | Live sitemap analysis — discovers URLs, categorizes them by section, and reports depth, freshness, and per-category counts |
+| `check_ai_crawlers`         | Live check of which AI assistants (ChatGPT, Claude, Perplexity, Microsoft Copilot, Google AI Overviews, Gemini Apps) can fetch a site's pages, read from its robots.txt |
 | `start_tech_stack_scan`     | Start async tech-stack detection (117 rules: tech / growth / engagement). Returns `scanId`                               |
 | `get_tech_stack_scan`       | Poll a tech-stack scan by `scanId` — returns detected technologies with confidence scores when complete                  |
 | `start_trust_signals_scan`  | Start async trust-signals analysis (34 signals across enterprise readiness, validation, social proof, authority, risk). Returns `scanId` |
 | `get_trust_signals_scan`    | Poll a trust-signals scan by `scanId` — returns per-signal verdicts and tier verdict when complete                       |
-| `start_agent_adoption_scan` | Start async Agent-Adoption Check (25 checks: discoverability, access, readability, agent endpoints). Returns `scanId`    |
-| `get_agent_adoption_scan`   | Poll an Agent-Adoption Check by `scanId` — returns complete results when finished                                        |
+| `start_agent_adoption_scan` | Start async Agent Adoption Check (25 checks: discoverability, access, readability, agent endpoints). Returns `scanId`    |
+| `get_agent_adoption_scan`   | Poll an Agent Adoption Check by `scanId` — returns complete results when finished                                        |
 | `fetch_url`                 | Fetch any URL with JS rendering and bot-protection handling. Returns body, headers, cleanStats. Optional `cleanHtml` strips noise for LLM token-cost savings. 60 req/min per API key |
 
 All paginated tools accept `page` and `limit` parameters. Check `pagination.hasMore` in the response to fetch more pages.
+
+Responses pass through from the CompetLab API unchanged, and the server's instructions tell your agent how to read them — above all, `null` means CompetLab did not measure a value, never zero or "no".
 
 ## Example Prompts
 
 Once connected, try asking your AI agent:
 
+- **"Which companies do the AI engines recommend in my category — and am I one of them?"**
+- **"Which pages do Perplexity and Google AI Overviews read for my buyers' questions that name my competitors but not me?"**
 - **"What changed on my competitors' pricing pages this week?"**
-- **"How does ChatGPT rank my brand vs competitors for [industry query]?"**
 - **"Show me the strategic briefing — what should I fix first?"**
+- **"How has the AI market map moved over the last 3 months?"**
 - **"Compare content strategies across all my tracked competitors"**
 - **"What critical alerts fired in the last 7 days?"**
-- **"Track how my AI visibility score changed over the last 3 months"**
 - **"Which competitors have better security headers than us?"**
 - **"Run a tech-stack scan on stripe.com — what are they using?"**
-- **"Check if openai.com blocks AI crawlers in their robots.txt"**
+- **"Which AI assistants can reach openai.com, according to its robots.txt?"**
 - **"Fetch g2.com/some-listing with cleanHtml and summarize the page"**
 
 See [examples/prompts.md](./examples/prompts.md) for more prompts organized by use case.

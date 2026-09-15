@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "com.competlab/mcp-server",
   "title": "CompetLab",
-  "description": "Competitive intelligence MCP server for B2B SaaS — monitor competitors across 5 dimensions including how ChatGPT, Claude, and Gemini rank your brand",
-  "version": "2.0.2",
+  "description": "Competitive intelligence for B2B SaaS — see where AI sends your buyers and what to do about it",
+  "version": "3.0.0",
   "remotes": [
     {
       "type": "streamable-http",

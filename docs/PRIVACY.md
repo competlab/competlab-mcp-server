@@ -21,7 +21,7 @@ CompetLab is committed to protecting your data. Here's a summary of what applies
 
 **Competitive data sources:**
 - CompetLab monitors publicly available information (websites, sitemaps, pricing pages)
-- AI Visibility data comes from querying public LLM APIs (OpenAI, Anthropic, Google)
+- AI Visibility and AI Sources data come from putting a project's questions to the AI engines (ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews) and reading their answers and the public pages they retrieve
 - No private or behind-login content is accessed
 
 ## Full Privacy Policy

@@ -1,40 +1,38 @@
 const API_BASE = "https://api.competlab.com";
+// The hosted server's HTTP client timeout. fetch_url accepts caller budgets up to 120s.
+const TIMEOUT_MS = 120_000;
 
 type McpResponse = {
   content: Array<{ type: "text"; text: string }>;
   isError?: true;
 };
 
-function missingKey(): McpResponse {
+// The same { error: { code, message, status } } body the hosted server and the API return.
+function errorResponse(code: string, message: string, status: number): McpResponse {
   return {
-    content: [
-      {
-        type: "text",
-        text: JSON.stringify({
-          error: "api_key_missing",
-          message: "COMPETLAB_API_KEY environment variable is not set",
-        }),
-      },
-    ],
+    content: [{ type: "text", text: JSON.stringify({ error: { code, message, status } }) }],
     isError: true,
   };
 }
 
-function unreachable(err: unknown): McpResponse {
-  return {
-    content: [
-      {
-        type: "text",
-        text: JSON.stringify({
-          error: "api_unreachable",
-          message:
-            err instanceof Error ? err.message : "Failed to reach CompetLab API",
-          status: 503,
-        }),
-      },
-    ],
-    isError: true,
-  };
+function missingKey(): McpResponse {
+  return errorResponse("api_key_missing", "COMPETLAB_API_KEY environment variable is not set", 401);
+}
+
+function unreachable(path: string, err: unknown): McpResponse {
+  // stdout carries the protocol, so the detail goes to stderr.
+  console.error(
+    `CompetLab API unreachable (${path}): ${err instanceof Error ? err.message : String(err)}`,
+  );
+  return errorResponse("api_unreachable", "CompetLab API is not reachable", 503);
+}
+
+async function toResponse(res: Response): Promise<McpResponse> {
+  const text = await res.text();
+  if (!res.ok) {
+    return { content: [{ type: "text", text }], isError: true };
+  }
+  return { content: [{ type: "text", text }] };
 }
 
 export async function apiGet(
@@ -59,17 +57,11 @@ export async function apiGet(
   try {
     const res = await fetch(url, {
       headers: { "CL-API-Key": apiKey },
+      signal: AbortSignal.timeout(TIMEOUT_MS),
     });
-
-    const body = await res.text();
-
-    if (!res.ok) {
-      return { content: [{ type: "text", text: body }], isError: true };
-    }
-
-    return { content: [{ type: "text", text: body }] };
+    return await toResponse(res);
   } catch (err) {
-    return unreachable(err);
+    return unreachable(path, err);
   }
 }
 
@@ -88,16 +80,10 @@ export async function apiPost(
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
+      signal: AbortSignal.timeout(TIMEOUT_MS),
     });
-
-    const text = await res.text();
-
-    if (!res.ok) {
-      return { content: [{ type: "text", text }], isError: true };
-    }
-
-    return { content: [{ type: "text", text }] };
+    return await toResponse(res);
   } catch (err) {
-    return unreachable(err);
+    return unreachable(path, err);
   }
 }

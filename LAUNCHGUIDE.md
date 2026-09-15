@@ -12,7 +12,7 @@ Structured metadata for MCP directories and marketplace submissions.
 | **Server URL** | `https://mcp.competlab.com/mcp` |
 | **Transport** | Streamable HTTP |
 | **Auth** | API key via `CL-API-Key` header or `api_key` query parameter |
-| **Tools Count** | 33 |
+| **Tools Count** | 38 |
 | **Language** | TypeScript |
 | **License** | Commercial (docs repo is MIT) |
 | **Category** | Competitive Intelligence, Marketing, AI & ML, Business Intelligence |
@@ -29,32 +29,32 @@ Structured metadata for MCP directories and marketplace submissions.
 
 ### Tagline (80 chars)
 
-> Competitive intelligence for the AI era — see how LLMs rank your brand
+> See where AI sends your buyers — and what to do about it
 
-### Short Description (190 chars)
+### Short Description (250 chars)
 
-> CompetLab monitors competitors across 5 dimensions including AI Visibility — tracking how ChatGPT, Claude, and Gemini mention and rank brands. 33 MCP tools for dashboards, alerts, strategic briefings, plus 9 free no-setup tools (sitemap, AI crawlers, tech stack, trust signals, agent adoption, URL fetch).
+> CompetLab tracks where you stand as buyers ask ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews who to use — then hands you a monthly Strategic Briefing on what to do. MCP tools for dashboards, alerts, and the briefing.
 
 ### Medium Description (500 chars)
 
-> CompetLab MCP Server gives AI agents access to competitive intelligence data across 5 dimensions: Tech & Trust, Content, Positioning, Pricing, and AI Visibility. The unique AI Visibility dimension tracks how ChatGPT, Claude, and Gemini mention and rank brands in response to industry queries — no other CI platform does this. 33 tools covering project management, competitor analysis, dimension dashboards, historical data, alerts, strategic briefings, scheduling, and 9 free no-setup tools (sitemap, AI crawlers, tech stack, trust signals, agent adoption, URL fetch with JS rendering). Built for B2B SaaS teams who need CI integrated into their AI workflows.
+> CompetLab MCP Server gives AI agents competitive intelligence across 6 monitored dimensions — AI Visibility, AI Sources, Positioning, Pricing, Content, Tech & Trust — plus a monthly Strategic Briefing that covers 14. AI Visibility tracks which brands ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews recommend; AI Sources shows the pages Perplexity and Google AI Overviews read, and whether you are on them. 38 tools: dashboards, history, alerts, briefings, schedules, and 9 free no-setup tools.
 
 ### Long Description (for G2, Capterra, full directory profiles)
 
-CompetLab is a competitive intelligence platform for B2B SaaS companies. It monitors 5 dimensions across your competitors: Tech & Trust Profile, Content Intelligence, Positioning, Pricing Intelligence, and AI Visibility.
+CompetLab is a competitive intelligence platform for B2B SaaS companies. It covers 14 dimensions — 6 monitored continuously across your competitors (AI Visibility, AI Sources, Positioning, Pricing Intelligence, Content Intelligence, and Tech & Trust Profile), plus 8 leading-edge dimensions researched for the monthly Strategic Briefing.
 
-The MCP server exposes 33 tools that let AI agents access the full CompetLab platform: manage projects and competitors, pull dashboard data across all 5 dimensions, review historical trends, check alerts, get the AI-generated strategic briefing, manage monitoring schedules, and run 9 free no-setup tools against any public domain (sitemap analysis, AI-crawler access checks, tech-stack detection, trust-signals analysis, agent-adoption checks, URL fetch with JS rendering).
+The MCP server exposes 38 tools that let AI agents work with the full CompetLab platform: list projects and competitors, pull dashboard data for all 6 monitored dimensions, review historical trends, check alerts, read the Strategic Briefing and its past editions, see monitoring schedules, and run 9 free no-setup tools against any public domain (sitemap analysis, AI-crawler access checks, tech-stack detection, trust-signals analysis, Agent Adoption Checks, URL fetch with JS rendering).
 
-What makes CompetLab unique is the AI Visibility dimension — it tracks how large language models (OpenAI, Claude, Gemini) mention and rank brands in response to industry queries. As buyers increasingly use AI assistants for vendor research, knowing how you appear in AI responses is becoming critical. No other CI platform monitors this.
+What makes CompetLab unique is the AI Visibility dimension — it tracks which brands ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews name and recommend in response to industry queries, ordered by how often each is named, never by position. AI Sources is its companion: for Perplexity and Google AI Overviews, it reads the pages the engine retrieved while answering a project's buying questions, and reports which of those pages name your competitors and not you. As buyers increasingly ask AI assistants who to use, knowing where you stand in those answers is becoming critical. No other CI platform monitors this.
 
 **Key capabilities via MCP:**
-- List and manage competitive intelligence projects
-- Add, view, and compare competitors
-- Pull real-time dashboards for pricing, content, positioning, tech trust, and AI visibility
+- List competitive intelligence projects and the competitors each one monitors
+- Pull the latest dashboards for AI visibility, AI sources, positioning, pricing, content, and tech & trust
 - Access historical monitoring data and trends
 - Review alerts with severity scoring and actionable recommendations
-- Get the AI-generated strategic briefing — synthesized insights and prioritized actions across all dimensions
-- Manage monitoring schedules
+- Read the AI-generated Strategic Briefing — synthesized insights and prioritized actions across 14 dimensions — and its past editions
+- See monitoring schedules
+- Run free scans against any public domain
 
 Built for product marketers, competitive intelligence analysts, and growth teams at B2B SaaS companies who want CI data flowing into their AI-powered workflows.
 
@@ -68,13 +68,15 @@ Built for product marketers, competitive intelligence analysts, and growth teams
 
 1. **"What changed on competitor pricing pages this week?"** — Pull pricing alerts and dashboard to catch pricing changes instantly, not weeks later from a churned customer.
 
-2. **"How does ChatGPT rank my brand vs competitors for [industry query]?"** — Use AI Visibility tools to see exactly how LLMs perceive and recommend your brand.
+2. **"Which companies do the AI engines recommend in my category — and am I one of them?"** — Use the AI Visibility market map to see who ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews recommend, and how often.
 
-3. **"Show me the strategic briefing — what should I fix first?"** — Get AI-generated prioritized recommendations across all 5 dimensions.
+3. **"Which pages do the AI engines read that name my competitors and not me?"** — Use AI Sources to get the work list: the pages worth getting onto, per engine, with the evidence.
 
-4. **"Compare content strategies across all tracked competitors"** — Pull content dashboards and changelogs to see who's publishing what.
+4. **"Show me the strategic briefing — what should I fix first?"** — Get AI-generated prioritized recommendations from the Strategic Briefing, which covers 14 dimensions.
 
-5. **"Build me a weekly competitive briefing for the team"** — Combine alerts, dashboards, and the strategic briefing into a structured report.
+5. **"Compare content strategies across all tracked competitors"** — Pull content dashboards and changelogs to see who's publishing what.
+
+6. **"Build me a weekly competitive briefing for the team"** — Combine alerts, dashboards, and the strategic briefing into a structured report.
 
 ---
 
@@ -90,7 +92,7 @@ Built for product marketers, competitive intelligence analysts, and growth teams
 
 ## Security & Scopes
 
-- **30 of 33 tools are read-only** — the 3 `start_*_scan` tools create scan records under your account but never edit or delete existing data
+- **35 of 38 tools are read-only** — the 3 `start_*_scan` tools create scan records under your account but never edit or delete existing data
 - **Data access:** Scoped to the authenticated organization's projects and competitors only
 - **External systems:** The MCP server communicates only with the CompetLab API (`api.competlab.com`). No third-party services are contacted during tool execution.
 - **API key format:** `cl_live_` prefix + 32 hex characters (40 chars total)
@@ -112,6 +114,6 @@ Built for product marketers, competitive intelligence analysts, and growth teams
 
 ## Pricing
 
-MCP access is **included with every CompetLab subscription** ($99/mo). Free 14-day trial includes full MCP access with all 33 tools.
+MCP access is **included with every CompetLab subscription** ($99/mo). Free 14-day trial includes full MCP access with all 38 tools.
 
 No additional fees for MCP usage. No per-call pricing.
