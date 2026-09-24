@@ -327,7 +327,7 @@ Responses pass through from the CompetLab API unchanged, and the server's instru
 
 Once connected, try asking your AI agent:
 
-- **"Which companies do the AI engines recommend in my category — and am I one of them?"**
+- **"Which companies do the AI models recommend in my category — and am I one of them?"**
 - **"Which pages do Perplexity and Google AI Overviews read for my buyers' questions that name my competitors but not me?"**
 - **"What changed on my competitors' pricing pages this week?"**
 - **"Show me the strategic briefing — what should I fix first?"**
