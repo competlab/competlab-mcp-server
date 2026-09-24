@@ -1,6 +1,4 @@
-// The hosted server's own description and instructions (mcp.competlab.com), kept verbatim except the
-// Strategic Tickets paragraphs: this server does not register the ticket tools, so its instructions say
-// where they live instead of describing them.
+// The hosted server's own description and instructions (mcp.competlab.com), kept verbatim.
 
 export const SERVER_DESCRIPTION =
   "Competitive intelligence for B2B SaaS — monitor competitors across tech stack, content, positioning, pricing, AI visibility (how ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews name and recommend your brand against competitors), and AI sources (the pages Perplexity and Google AI Overviews read when they answer your buyers' questions, and whether your brand is on them)";
@@ -26,13 +24,21 @@ false precision. A page we could not read is listed and never counted as a page 
 is absent from.
 
 Strategic Tickets is the project's board — the work the team has decided to do, with an owner, a column and a
-thread. The Strategic Tickets tools, which read and work that board, are available on the hosted server at
-mcp.competlab.com only; this server does not register them.
+thread — and its tools read and write the same tickets the team sees in the app: fixed columns (triage, todo, in_progress, done, dismissed;
+triage means nobody has decided yet and dismissed means we will not do this),
+a Markdown description and comment thread, the project's own labels, an owner, a due date, effort and impact.
+Three things to work by. A move names NEIGHBOURS rather than a position: say which ticket the moved one should
+sit below (beforeId) and which it should sit above (afterId), taken from list_tickets, and a neighbour that has
+since moved is ignored instead of failing the move. On update_ticket a null CLEARS a field while an omitted field is left
+alone — the description is cleared with an empty string and the labels with an empty list, because there an
+empty value is a real one. And writing needs a read_write API key: a read key lists and reads tickets and is
+refused on every tool that changes one.
 
 A Strategic Briefing opens its recommended work as tickets on this board. They land in triage and the team moves them from there, each carrying the
 edition it came from, the part of the analysis it belongs to and that edition's estimate of the work. They are the
-team's from that moment. The briefing itself returns no list of them: its tickets field says how many it opened and
-how many now sit in each column.
+team's from that moment. To read what one edition opened, call list_tickets with origin='briefing' and
+that edition's runId as briefingRunId — the runId get_briefing and get_briefing_history return. The briefing itself
+returns no list of them: its tickets field says how many it opened and how many now sit in each column.
 
 READING THE DATA — this rule governs every tool below.
 

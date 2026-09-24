@@ -42,6 +42,18 @@ Once CompetLab MCP is connected, try these prompts with your AI agent. All promp
 
 > "What did last month's briefing say, and what has changed since?"
 
+## Strategic Tickets
+
+> "What is in progress on our board, and who owns each ticket?"
+
+> "Which tickets did the latest briefing open, and which have we dismissed?"
+
+> "Move #14 to in progress and assign it to Anna"
+
+> "Open a ticket in todo for the pricing page gap you just found, and add a comment with the evidence"
+
+Writing to the board (create, update, move, delete, comment) needs a `read_write` API key.
+
 ## Pricing Intelligence
 
 > "What changed on my competitors' pricing pages recently?"

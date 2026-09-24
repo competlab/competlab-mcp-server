@@ -7,13 +7,13 @@
 [![MCP](https://img.shields.io/badge/MCP-HTTP_%7C_stdio-7C3AED)](https://modelcontextprotocol.io)
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![38 Tools](https://img.shields.io/badge/Tools-38-brightgreen)](#available-tools)
+[![48 Tools](https://img.shields.io/badge/Tools-48-brightgreen)](#available-tools)
 
 [![Glama](https://glama.ai/mcp/servers/competlab/competlab-mcp-server/badges/score.svg)](https://glama.ai/mcp/servers/competlab/competlab-mcp-server)
 
 > Competitive intelligence for AI agents — see where AI sends your buyers, and what to do about it.
 
-More B2B buyers are asking AI before they Google. CompetLab monitors competitors across 6 dimensions — including **AI Visibility**, which tracks which brands ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews recommend, and **AI Sources**, the pages Perplexity and Google AI Overviews read when they answer your buyers' questions. This MCP server gives your AI agent access to all of it: dashboards, historical data, alerts, and the Strategic Briefing.
+More B2B buyers are asking AI before they Google. CompetLab monitors competitors across 6 dimensions — including **AI Visibility**, which tracks which brands ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews recommend, and **AI Sources**, the pages Perplexity and Google AI Overviews read when they answer your buyers' questions. This MCP server gives your AI agent access to all of it: dashboards, historical data, alerts, the Strategic Briefing, and the project's Strategic Tickets board.
 
 ## Supported Clients
 
@@ -210,7 +210,7 @@ AI Visibility answers who AI recommends — which brands ChatGPT, Claude, Gemini
 
 ## Available Tools
 
-**38 tools.** 35 are read-only; 3 are async-scan starters that create a scan record (`start_tech_stack_scan`, `start_trust_signals_scan`, `start_agent_adoption_scan`).
+**48 tools.** 40 are read-only; 3 are async-scan starters that create a scan record (`start_tech_stack_scan`, `start_trust_signals_scan`, `start_agent_adoption_scan`); 5 write to the project's Strategic Tickets board (`create_ticket`, `update_ticket`, `move_ticket`, `delete_ticket`, `add_ticket_comment`) and need a `read_write` API key.
 
 ### Projects & Competitors
 
@@ -279,6 +279,23 @@ AI Visibility answers who AI recommends — which brands ChatGPT, Claude, Gemini
 | `get_briefing_history` | Past briefing editions, newest first — publication date, status and headline verdict per edition                                                                         |
 | `get_briefing_edition` | One past briefing edition in full, by run ID                                                                                                                             |
 
+### Strategic Tickets
+
+The project's board — the work the team has decided to do, with an owner, a column and a thread. The same tickets the team sees in the app, in five fixed columns: `triage`, `todo`, `in_progress`, `done`, `dismissed`. A Strategic Briefing opens its recommendations here, in `triage`. A `read` key lists and reads tickets; the tools that write need a `read_write` key. The ticket tools need an active subscription (`402 subscription_required` otherwise).
+
+| Tool                    | Description                                                                                                        |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `list_tickets`          | A project's Strategic Tickets in board order — the work the team has taken on, across five fixed columns            |
+| `get_ticket`            | One ticket in full — description, labels, owner, due date, effort, impact and how long its thread is               |
+| `create_ticket`         | Open a ticket on a project's board. Needs a read_write API key                                                     |
+| `update_ticket`         | Change a ticket's title, description, labels, owner, due date, effort or impact. Needs a read_write API key         |
+| `move_ticket`           | Move a ticket to another column, or reorder it, by naming the tickets it sits between. Needs a read_write API key  |
+| `delete_ticket`         | Delete a ticket and its thread. Needs a read_write API key                                                         |
+| `list_ticket_comments`  | A ticket's comment thread, oldest first                                                                            |
+| `add_ticket_comment`    | Add a Markdown comment to a ticket's thread. Needs a read_write API key                                            |
+| `list_ticket_labels`    | A project's ticket labels — each a name and a colour                                                               |
+| `list_ticket_assignees` | Who a ticket can be assigned to — the organization's current members, by name and ID                              |
+
 ### Alerts & Schedules
 
 | Tool             | Description                                                                   |
@@ -314,6 +331,7 @@ Once connected, try asking your AI agent:
 - **"Which pages do Perplexity and Google AI Overviews read for my buyers' questions that name my competitors but not me?"**
 - **"What changed on my competitors' pricing pages this week?"**
 - **"Show me the strategic briefing — what should I fix first?"**
+- **"Which tickets did the latest briefing open, and where do they stand on our board?"**
 - **"How has the AI market map moved over the last 3 months?"**
 - **"Compare content strategies across all my tracked competitors"**
 - **"What critical alerts fired in the last 7 days?"**
@@ -339,7 +357,7 @@ See [examples/prompts.md](./examples/prompts.md) for more prompts organized by u
 | **`CL-API-Key` header**       | Claude Code, Cursor, VS Code, Windsurf, Cline                     | `CL-API-Key: cl_live_...` |
 | **`api_key` query parameter** | Claude Desktop, Claude Web, clients without custom header support | `?api_key=cl_live_...`    |
 
-One API key covers your entire organization. Most tools are read-only; the three `start_*_scan` tools create scan records under your account (no edits to existing data). The `fetch_url` tool is rate-limited at 60 req/min per API key (tighter than the 1000/min default for other free tools).
+One API key covers your entire organization. Most tools are read-only; the three `start_*_scan` tools create scan records under your account (no edits to existing data), and the five Strategic Tickets write tools change the project's board — they need a `read_write` key, and a `read` key is refused on them. The `fetch_url` tool is rate-limited at 60 req/min per API key (tighter than the 1000/min default for other free tools).
 
 ### Pricing
 

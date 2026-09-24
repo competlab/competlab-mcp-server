@@ -65,21 +65,23 @@ export async function apiGet(
   }
 }
 
-export async function apiPost(
+// POST, PATCH and DELETE. PATCH bodies carry null on purpose: on update_ticket a null clears a field.
+export async function apiSend(
+  method: "POST" | "PATCH" | "DELETE",
   path: string,
-  body: Record<string, unknown>,
+  body?: Record<string, unknown>,
 ): Promise<McpResponse> {
   const apiKey = process.env.COMPETLAB_API_KEY;
   if (!apiKey) return missingKey();
 
+  const headers: Record<string, string> = { "CL-API-Key": apiKey };
+  if (body !== undefined) headers["Content-Type"] = "application/json";
+
   try {
     const res = await fetch(`${API_BASE}${path}`, {
-      method: "POST",
-      headers: {
-        "CL-API-Key": apiKey,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
+      method,
+      headers,
+      ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
     return await toResponse(res);

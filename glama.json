@@ -3,12 +3,12 @@
   "maintainers": ["kshvab"],
   "name": "competlab",
   "display_name": "CompetLab MCP Server",
-  "description": "Competitive intelligence for B2B SaaS — see where AI sends your buyers. 6 monitored dimensions, including AI Visibility (which brands ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews recommend) and AI Sources (the pages Perplexity and Google AI Overviews read, and whether you are on them). 38 MCP tools: project dashboards, alerts, the Strategic Briefing and its past editions, plus 9 free no-setup tools (sitemap, AI crawlers, tech stack, trust signals, agent adoption, URL fetch with JS rendering).",
+  "description": "Competitive intelligence for B2B SaaS — see where AI sends your buyers. 6 monitored dimensions, including AI Visibility (which brands ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews recommend) and AI Sources (the pages Perplexity and Google AI Overviews read, and whether you are on them). 48 MCP tools: project dashboards, alerts, the Strategic Briefing and its past editions, the Strategic Tickets board, plus 9 free no-setup tools (sitemap, AI crawlers, tech stack, trust signals, agent adoption, URL fetch with JS rendering).",
   "repository": "https://github.com/competlab/competlab-mcp-server",
   "homepage": "https://competlab.com/developers/mcp",
   "author": "competlab",
   "license": "MIT",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "categories": [
     "competitive-intelligence",
     "marketing",
@@ -35,12 +35,13 @@
     "type": "api-key",
     "header": "CL-API-Key"
   },
-  "tools_count": 38,
+  "tools_count": 48,
   "features": [
     "AI Visibility market map across ChatGPT, Claude, Gemini, Perplexity, and Google AI Overviews — which brands each recommends, and how often",
     "AI Sources — the pages Perplexity and Google AI Overviews read when they answer your buyers' questions, and whether you are on them",
     "6 monitored dimensions (AI Visibility, AI Sources, Positioning, Pricing, Content, Tech & Trust); the Strategic Briefing covers 14",
     "AI-generated Strategic Briefing, whose recommendations open as tickets on your Strategic Tickets board, plus its past editions",
+    "Strategic Tickets — read and work the project's board: list, open, create, move and comment on tickets (writing needs a read_write API key)",
     "Historical trend data and monitoring schedules",
     "Competitive change alerts with severity scoring",
     "Free no-setup tools: sitemap analysis, AI-crawler access check, tech-stack detection (117 rules), trust-signals analysis (34 signals), Agent Adoption Check (25 checks), URL fetch with JS rendering and HTML cleanup"

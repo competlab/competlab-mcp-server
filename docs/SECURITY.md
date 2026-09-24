@@ -2,7 +2,10 @@
 
 ## Scope & Permissions
 
-**35 of 38 MCP tools are read-only** — they cannot create, update, or delete CompetLab data. The 3 exceptions (`start_tech_stack_scan`, `start_trust_signals_scan`, `start_agent_adoption_scan`) create a new scan record under your account when you ask for an async free-tool scan; they never modify existing projects, competitors, or settings.
+**40 of 48 MCP tools are read-only** — they cannot create, update, or delete CompetLab data. The 8 exceptions:
+
+- `start_tech_stack_scan`, `start_trust_signals_scan`, `start_agent_adoption_scan` create a new scan record under your account when you ask for an async free-tool scan; they never modify existing projects, competitors, or settings.
+- `create_ticket`, `update_ticket`, `move_ticket`, `delete_ticket`, `add_ticket_comment` write to the project's Strategic Tickets board. They need a `read_write` API key; a `read` key is refused on them and can only list and read tickets. `delete_ticket` cannot be undone, and a ticket a Strategic Briefing opened cannot be deleted at all — it is dismissed instead.
 
 ## Authentication
 

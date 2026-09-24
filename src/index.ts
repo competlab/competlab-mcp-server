@@ -2,13 +2,13 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 import { tools } from "./tools.js";
-import { apiGet, apiPost } from "./api-client.js";
+import { apiGet, apiSend } from "./api-client.js";
 import { SERVER_DESCRIPTION, SERVER_INSTRUCTIONS } from "./instructions.js";
 
 const server = new McpServer(
   {
     name: "competlab",
-    version: "3.0.1",
+    version: "3.1.0",
     description: SERVER_DESCRIPTION,
   },
   { instructions: SERVER_INSTRUCTIONS },
@@ -31,12 +31,13 @@ for (const tool of tools) {
         if (args[key] !== undefined) query[key] = args[key];
       }
 
-      if (tool.method === "POST") {
+      if (tool.method === "DELETE") return apiSend("DELETE", path);
+      if (tool.method === "POST" || tool.method === "PATCH") {
         const body: Record<string, unknown> = {};
         for (const key of tool.bodyParams ?? []) {
           if (args[key] !== undefined) body[key] = args[key];
         }
-        return apiPost(path, body);
+        return apiSend(tool.method, path, body);
       }
       return apiGet(path, Object.keys(query).length ? query : undefined);
     },

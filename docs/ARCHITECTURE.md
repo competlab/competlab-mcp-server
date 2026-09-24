@@ -19,9 +19,10 @@ High-level overview of the CompetLab MCP Server architecture.
 │  Server             │
 │  mcp.competlab.com  │
 │                     │
-│  38 tools           │
-│  (35 read-only +    │
-│   3 async-start)    │
+│  48 tools           │
+│  (40 read-only +    │
+│   3 async-start +   │
+│   5 ticket writes)  │
 │  API key validation │
 │  Error handling     │
 └──────────┬──────────┘
@@ -100,6 +101,7 @@ Common error codes:
 - **Dimensions** (AI Visibility, AI Sources, Positioning, Pricing, Content, Tech & Trust) each have their own dashboard, history, and run/check detail endpoints
 - **Alerts** are generated automatically when competitive changes are detected
 - **Strategic Briefings** are AI-generated, synthesized competitive reads across 14 dimensions — the 6 monitored ones plus 8 researched for the briefing alone: what changed and what it means. Its recommendations open as tickets on the project's Strategic Tickets board, and the briefing reports how they stand. Past editions stay readable
+- **Strategic Tickets** are the project's board — the work the team has decided to do, in five fixed columns (`triage`, `todo`, `in_progress`, `done`, `dismissed`), each ticket with an owner, labels, a due date, effort, impact and a comment thread. The ticket tools read and write the same board the team sees in the app; writing needs a `read_write` API key
 - **Schedules** control the monitoring frequency for each dimension
 
 All IDs are 24-character hex strings (MongoDB ObjectIds).

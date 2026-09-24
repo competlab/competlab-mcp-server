@@ -35,6 +35,36 @@ const zeroBasedIndex = () =>
       .transform(Number),
   ]);
 
+// The Strategic Tickets board's vocabulary and shared sentences, as the hosted server renders them.
+const TICKET_COLUMNS = ["triage", "todo", "in_progress", "done", "dismissed"] as const;
+const TICKET_ORIGINS = ["user", "api", "briefing", "ai_sources"] as const;
+const TICKET_EFFORTS = ["low", "medium", "high"] as const;
+const TICKET_DIMENSIONS = [
+  "ai-visibility",
+  "ai-sources",
+  "positioning",
+  "pricing",
+  "content",
+  "tech-trust",
+  "agent-readiness",
+  "ai-ecosystem",
+  "customer-voice",
+  "funding-capital",
+  "hiring-gtm",
+  "landscape",
+  "product-launches",
+  "reliability-status",
+] as const;
+
+const COLUMN_MEANINGS =
+  "What the columns mean: triage — nobody has decided yet; todo — decided and not started; in_progress — being worked on; done — finished; dismissed — we will not do this. The set is fixed and a project cannot add to it.";
+
+const WRITE_KEY = "Needs a read_write API key; a read key is refused and can only list and read.";
+
+const MARKDOWN_NOTE = "A ticket's description and every comment are Markdown.";
+
+const IMPACT_SCALE = "1 Minor · 2 Moderate · 3 Significant · 4 Critical";
+
 export interface ToolAnnotations {
   readOnlyHint?: boolean;
   destructiveHint?: boolean;
@@ -47,7 +77,7 @@ export interface ToolDef {
   description: string;
   parameters: z.ZodObject<any>;
   path: (args: Record<string, any>) => string;
-  method?: "GET" | "POST";
+  method?: "GET" | "POST" | "PATCH" | "DELETE";
   queryParams?: string[];
   bodyParams?: string[];
   annotations?: ToolAnnotations;
@@ -1232,5 +1262,310 @@ export const tools: ToolDef[] = [
     }),
     path: (a) => `/v1/tools/agent-adoption/scans/${a.scanId}`,
     annotations: { readOnlyHint: true, openWorldHint: true },
+  },
+
+  // ── Strategic Tickets ─────────────────────────────────────
+  {
+    name: "list_tickets",
+    description:
+      "List a project's Strategic Tickets — the work its team has taken on, whether a person opened it or the customer's own automation did. " +
+      "Returns one flat list in board order: the columns in the order triage, todo, in_progress, done, dismissed, and inside each column the order the team put them in. " +
+      "Keep the order you receive; no ticket carries a position of its own. " +
+      "A person names a ticket by its number, written #14 in the app and held here as the integer 14. " +
+      "No tool takes a number: find the ticket in this list whose number matches, then act on it with its id. " +
+      COLUMN_MEANINGS +
+      " This is an INDEX: every field of every ticket EXCEPT its Markdown description, which comes back as an empty string until you pass include=['description'] — get_ticket always has it. " +
+      "Narrow before you read: status takes one column or several (['todo','in_progress']); q finds a title without downloading the board; number finds the one ticket a person called #14; assignee and labelId narrow to an owner or a label. " +
+      "Every filter narrows total the same way it narrows items. " +
+      "done and dismissed return only the tickets that reached them in the last 30 days unless you pass closed='all', and hasMore says there are more than you were given. " +
+      "total counts every ticket in the columns this call covers — quote total, never the length of items. " +
+      "A Strategic Briefing opens its recommended work as tickets in triage, each carrying the edition it came from and the part of the analysis it belongs to; to read what one edition opened, pass origin='briefing' and that edition's runId as briefingRunId — the runId get_briefing and get_briefing_history return. " +
+      "One edition's tickets come back whole, finished and dismissed ones included however long ago they were closed, so the list matches the count the briefing's tickets field states. " +
+      "Every filter narrows total the same way it narrows items. " +
+      MARKDOWN_NOTE,
+    parameters: z.object({
+      projectId: objectId("Project ID (from list_projects)"),
+      status: z
+        .union([z.enum(TICKET_COLUMNS), z.array(z.enum(TICKET_COLUMNS))])
+        .optional()
+        .describe("Return only the tickets in these columns — one, or several: ['todo','in_progress']"),
+      closed: z
+        .enum(["recent", "all"])
+        .optional()
+        .describe("How much of done and dismissed to return: 'recent' (the default) or 'all'"),
+      origin: z.enum(TICKET_ORIGINS).optional().describe("Return only the tickets one source opened"),
+      dimension: z
+        .enum(TICKET_DIMENSIONS)
+        .optional()
+        .describe(
+          "Return only the tickets a Strategic Briefing opened for one part of its analysis. Nothing a person or an API key opens carries a dimension",
+        ),
+      briefingRunId: objectId(
+        "Return only the tickets one Strategic Briefing edition opened — its runId, from get_briefing or get_briefing_history",
+      ).optional(),
+      assignee: z
+        .string()
+        .optional()
+        .describe(
+          "Return only the tickets one person owns — their user ID from list_ticket_assignees, or 'none' for the tickets nobody owns",
+        ),
+      labelId: z
+        .string()
+        .optional()
+        .describe("Return only the tickets carrying one label — its ID from list_ticket_labels"),
+      number: z
+        .number()
+        .int()
+        .min(1)
+        .optional()
+        .describe("Return the one ticket carrying this number on the board — what a person means by #14"),
+      q: z
+        .string()
+        .optional()
+        .describe(
+          "Return only the tickets whose TITLE contains this text, compared without regard to case and matched literally",
+        ),
+      include: z
+        .array(z.enum(["description"]))
+        .optional()
+        .describe(
+          "Ask for a ticket's Markdown description in the list. Left out by default: a board's descriptions are most of its size, and a briefing's description quotes its own grounding, so a whole board with bodies is large enough to be worth asking for on purpose. get_ticket always returns it",
+        ),
+    }),
+    path: (a) => `/v1/projects/${a.projectId}/tickets`,
+    queryParams: [
+      "status",
+      "closed",
+      "origin",
+      "dimension",
+      "briefingRunId",
+      "assignee",
+      "labelId",
+      "number",
+      "q",
+      "include",
+    ],
+    annotations: { readOnlyHint: true, openWorldHint: false },
+  },
+  {
+    name: "get_ticket",
+    description:
+      "Get one ticket: its description, its labels resolved to name and colour, who owns it, when it is due, how much work it is, how much it matters, and how many entries its thread holds. " +
+      "On a ticket a Strategic Briefing opened, briefing names the edition it came from, the part of the analysis it belongs to and the edition's estimate of the work; it is null on every other ticket. " +
+      MARKDOWN_NOTE +
+      " Read deletable before proposing to delete it — a ticket a Strategic Briefing opened is dismissed, never deleted. " +
+      "A ticket ID belonging to another project answers not found, exactly as an ID that exists nowhere does.",
+    parameters: z.object({
+      projectId: objectId("Project ID (from list_projects)"),
+      ticketId: objectId("Ticket ID (from list_tickets)"),
+    }),
+    path: (a) => `/v1/projects/${a.projectId}/tickets/${a.ticketId}`,
+    annotations: { readOnlyHint: true, openWorldHint: false },
+  },
+  {
+    name: "create_ticket",
+    description:
+      "Open a ticket on a project's board. title and status are both required — status names the column it lands in and has no default, because where a ticket belongs depends on who opened it. " +
+      "A new ticket lands at the top of its column. A board holds at most 5,000 tickets, and a create past that is refused. " +
+      COLUMN_MEANINGS +
+      " labelIds names labels from the project's own list (list_ticket_labels); a label that is not on that list is refused. " +
+      "Labels are created in the CompetLab app or through the customer API — not from here. " +
+      "The ticket is recorded as opened by an API key rather than by a person, which is how the board tells an automation's tickets from someone's own. " +
+      WRITE_KEY,
+    parameters: z.object({
+      projectId: objectId("Project ID (from list_projects)"),
+      title: z.string().describe("The ticket's title"),
+      status: z.enum(TICKET_COLUMNS).describe("The column the ticket opens in"),
+      description: z.string().optional().describe("The ticket's description, in Markdown"),
+      labelIds: z
+        .array(z.string())
+        .optional()
+        .describe("Label IDs from the project's list (from list_ticket_labels)"),
+      assigneeUserId: z
+        .string()
+        .optional()
+        .describe("The user ID of a current member of the organization (from list_ticket_assignees)"),
+      dueDate: z
+        .string()
+        .optional()
+        .describe("The day the ticket is due, as YYYY-MM-DD — a calendar day, with no clock and no time zone"),
+      effort: z.enum(TICKET_EFFORTS).optional().describe("How much work the ticket is"),
+      impact: z
+        .number()
+        .int()
+        .min(1)
+        .max(4)
+        .optional()
+        .describe(`How much the ticket matters, from 1 to 4: ${IMPACT_SCALE}`),
+    }),
+    path: (a) => `/v1/projects/${a.projectId}/tickets`,
+    method: "POST",
+    bodyParams: [
+      "title",
+      "status",
+      "description",
+      "labelIds",
+      "assigneeUserId",
+      "dueDate",
+      "effort",
+      "impact",
+    ],
+    annotations: { readOnlyHint: false, openWorldHint: false },
+  },
+  {
+    name: "update_ticket",
+    description:
+      "Change a ticket's title, description, labels, owner, due date, effort or impact. " +
+      "Omit a field to leave it as it is, send a value to replace it, and send null to clear it — except the description, cleared with an empty string, and the labels, cleared with an empty list, because for those an empty value is a real one. " +
+      "The column is never changed here: use move_ticket, so a ticket cannot change column as a side effect of an edit. " +
+      WRITE_KEY,
+    parameters: z.object({
+      projectId: objectId("Project ID (from list_projects)"),
+      ticketId: objectId("Ticket ID (from list_tickets)"),
+      title: z.string().optional().describe("The ticket's title"),
+      description: z
+        .string()
+        .optional()
+        .describe("The ticket's description, in Markdown. An empty string clears it"),
+      labelIds: z
+        .array(z.string())
+        .optional()
+        .describe(
+          "Label IDs from the project's list. The list replaces what the ticket holds; an empty list clears them",
+        ),
+      assigneeUserId: z
+        .string()
+        .nullable()
+        .optional()
+        .describe(
+          "A current member's user ID (from list_ticket_assignees), or null to leave the ticket unassigned",
+        ),
+      dueDate: z
+        .string()
+        .nullable()
+        .optional()
+        .describe("The day the ticket is due as YYYY-MM-DD, or null to take it off"),
+      effort: z
+        .enum(TICKET_EFFORTS)
+        .nullable()
+        .optional()
+        .describe("How much work the ticket is, or null to take it off"),
+      impact: z
+        .number()
+        .int()
+        .min(1)
+        .max(4)
+        .nullable()
+        .optional()
+        .describe(`How much the ticket matters, from 1 to 4 (${IMPACT_SCALE}), or null to take it off`),
+    }),
+    path: (a) => `/v1/projects/${a.projectId}/tickets/${a.ticketId}`,
+    method: "PATCH",
+    bodyParams: ["title", "description", "labelIds", "assigneeUserId", "dueDate", "effort", "impact"],
+    annotations: { readOnlyHint: false, openWorldHint: false },
+  },
+  {
+    name: "move_ticket",
+    description:
+      "Move a ticket to another column, or reorder it inside the one it is in. " +
+      "Name the destination column in status, and the two tickets it will sit between: beforeId is the one that will sit directly ABOVE it, afterId the one directly BELOW. Name either or both. " +
+      "Example: to put ticket X at the top of todo, pass status='todo', afterId=<the ticket currently first in todo>, and no beforeId. " +
+      "Omitting both puts the ticket at the BOTTOM of the column — which is its first card when the column is empty. " +
+      "There is no position and no index to compute — read the neighbours out of list_tickets, which returns each column in its own order. " +
+      "A neighbour that has since moved or been deleted is ignored and the ticket lands at the nearest place that is still true, so a move never fails because the list you read was a moment out of date. " +
+      COLUMN_MEANINGS +
+      " " +
+      WRITE_KEY,
+    parameters: z.object({
+      projectId: objectId("Project ID (from list_projects)"),
+      ticketId: objectId("Ticket ID (from list_tickets)"),
+      status: z
+        .enum(TICKET_COLUMNS)
+        .describe(
+          "The column the ticket ends up in — always the destination, even when it is the column it already sits in",
+        ),
+      beforeId: z
+        .string()
+        .optional()
+        .describe("The ID of the ticket that will sit directly ABOVE this one"),
+      afterId: z
+        .string()
+        .optional()
+        .describe("The ID of the ticket that will sit directly BELOW this one"),
+    }),
+    path: (a) => `/v1/projects/${a.projectId}/tickets/${a.ticketId}/move`,
+    method: "PATCH",
+    bodyParams: ["status", "beforeId", "afterId"],
+    annotations: { readOnlyHint: false, openWorldHint: false },
+  },
+  {
+    name: "delete_ticket",
+    description:
+      "Delete a ticket and its thread. This cannot be undone. " +
+      "A ticket a Strategic Briefing opened cannot be deleted at all — move it to dismissed with move_ticket instead, so that what opened it does not open it again. " +
+      "Read deletable on the ticket first; deleting one that is not deletable is refused. " +
+      WRITE_KEY,
+    parameters: z.object({
+      projectId: objectId("Project ID (from list_projects)"),
+      ticketId: objectId("Ticket ID (from list_tickets)"),
+    }),
+    path: (a) => `/v1/projects/${a.projectId}/tickets/${a.ticketId}`,
+    method: "DELETE",
+    annotations: { readOnlyHint: false, destructiveHint: true, openWorldHint: false },
+  },
+  {
+    name: "list_ticket_comments",
+    description:
+      "List a ticket's thread, oldest first and whole — nothing pages it, so nothing is counted twice. " +
+      "Each entry is Markdown and says what wrote it: a person working in the app, or an API key. " +
+      "edited says whether an entry was rewritten after it was first written; do not work that out from the timestamps.",
+    parameters: z.object({
+      projectId: objectId("Project ID (from list_projects)"),
+      ticketId: objectId("Ticket ID (from list_tickets)"),
+    }),
+    path: (a) => `/v1/projects/${a.projectId}/tickets/${a.ticketId}/comments`,
+    annotations: { readOnlyHint: true, openWorldHint: false },
+  },
+  {
+    name: "add_ticket_comment",
+    description:
+      "Add an entry to a ticket's thread, written in Markdown. " +
+      "It is recorded as written by an API key rather than by a person, so a reader can tell it from someone's own note. " +
+      "A thread holds at most 500 entries. " +
+      WRITE_KEY,
+    parameters: z.object({
+      projectId: objectId("Project ID (from list_projects)"),
+      ticketId: objectId("Ticket ID (from list_tickets)"),
+      body: z.string().describe("The entry's text, in Markdown"),
+    }),
+    path: (a) => `/v1/projects/${a.projectId}/tickets/${a.ticketId}/comments`,
+    method: "POST",
+    bodyParams: ["body"],
+    annotations: { readOnlyHint: false, openWorldHint: false },
+  },
+  {
+    name: "list_ticket_assignees",
+    description:
+      "List the people a ticket in this project can be assigned to — everyone who is currently a member of the organization, each as the same userId and fullName a ticket already carries for its author and its assignee. " +
+      "This is where assigneeUserId comes from on create_ticket and update_ticket: a user ID from anywhere else is refused. " +
+      "Somebody invited but not yet joined is not here, because a ticket cannot be assigned to them. " +
+      "Nothing about a person beyond their name and ID is ever returned.",
+    parameters: z.object({
+      projectId: objectId("Project ID (from list_projects)"),
+    }),
+    path: (a) => `/v1/projects/${a.projectId}/tickets/assignees`,
+    annotations: { readOnlyHint: true, openWorldHint: false },
+  },
+  {
+    name: "list_ticket_labels",
+    description:
+      "List a project's ticket labels — each one a name and a colour, in the order the project picks them. " +
+      "These are the only labels a ticket may carry, and a ticket names them by ID in labelIds, so read this before creating or updating one. " +
+      "A label is the team's own vocabulary: nothing about a ticket is decided by which labels it holds.",
+    parameters: z.object({
+      projectId: objectId("Project ID (from list_projects)"),
+    }),
+    path: (a) => `/v1/projects/${a.projectId}/tickets/labels`,
+    annotations: { readOnlyHint: true, openWorldHint: false },
   },
 ];
