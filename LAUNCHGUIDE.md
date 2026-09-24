@@ -45,14 +45,14 @@ CompetLab is a competitive intelligence platform for B2B SaaS companies. It cove
 
 The MCP server exposes 38 tools that let AI agents work with the full CompetLab platform: list projects and competitors, pull dashboard data for all 6 monitored dimensions, review historical trends, check alerts, read the Strategic Briefing and its past editions, see monitoring schedules, and run 9 free no-setup tools against any public domain (sitemap analysis, AI-crawler access checks, tech-stack detection, trust-signals analysis, Agent Adoption Checks, URL fetch with JS rendering).
 
-What makes CompetLab unique is the AI Visibility dimension — it tracks which brands ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews name and recommend in response to industry queries, ordered by how often each is named, never by position. AI Sources is its companion: for Perplexity and Google AI Overviews, it reads the pages the engine retrieved while answering a project's buying questions, and reports which of those pages name your competitors and not you. As buyers increasingly ask AI assistants who to use, knowing where you stand in those answers is becoming critical. No other CI platform monitors this.
+The AI Visibility dimension answers who AI recommends — it tracks which brands ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews name and recommend in response to industry queries, ordered by how often each is named, never by position. AI Sources is its companion: for Perplexity and Google AI Overviews, it reads the pages the engine retrieved while answering a project's buying questions, and reports which of those pages name your competitors and not you. As buyers increasingly ask AI assistants who to use, knowing where you stand in those answers is becoming critical.
 
 **Key capabilities via MCP:**
 - List competitive intelligence projects and the competitors each one monitors
 - Pull the latest dashboards for AI visibility, AI sources, positioning, pricing, content, and tech & trust
 - Access historical monitoring data and trends
 - Review alerts with severity scoring and actionable recommendations
-- Read the AI-generated Strategic Briefing — synthesized insights and prioritized actions across 14 dimensions — and its past editions
+- Read the AI-generated Strategic Briefing — a synthesized read across 14 dimensions, with its recommendations opened as tickets on your Strategic Tickets board — and its past editions
 - See monitoring schedules
 - Run free scans against any public domain
 
@@ -72,7 +72,7 @@ Built for product marketers, competitive intelligence analysts, and growth teams
 
 3. **"Which pages do the AI engines read that name my competitors and not me?"** — Use AI Sources to get the work list: the pages worth getting onto, per engine, with the evidence.
 
-4. **"Show me the strategic briefing — what should I fix first?"** — Get AI-generated prioritized recommendations from the Strategic Briefing, which covers 14 dimensions.
+4. **"Show me the strategic briefing — what should I fix first?"** — Get the Strategic Briefing's read across 14 dimensions, and how the tickets it opened now stand.
 
 5. **"Compare content strategies across all tracked competitors"** — Pull content dashboards and changelogs to see who's publishing what.
 

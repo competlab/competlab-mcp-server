@@ -10,7 +10,7 @@ Once CompetLab MCP is connected, try these prompts with your AI agent. All promp
 
 > "Who are the competitors I'm tracking?"
 
-## AI Visibility (unique to CompetLab)
+## AI Visibility
 
 > "Which companies do ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews recommend in my category — and am I one of them?"
 
@@ -38,7 +38,7 @@ Once CompetLab MCP is connected, try these prompts with your AI agent. All promp
 
 > "What are the top competitive threats I should address this week?"
 
-> "Give me the full strategic briefing — pull the actions and competitor sections"
+> "Give me the full strategic briefing — pull the competitor and pricing sections"
 
 > "What did last month's briefing say, and what has changed since?"
 

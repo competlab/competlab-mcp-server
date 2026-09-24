@@ -60,8 +60,7 @@ export const tools: ToolDef[] = [
     name: "list_projects",
     description:
       "List all accessible projects with status, competitor count, and last monitored timestamp. " +
-      "This is the starting point — use it to discover available projectId values for other tools. " +
-      "(Scope depends on the key: the customer MCP returns one organization's projects; the Atlas control-plane MCP returns every project across all organizations.)",
+      "This is the starting point — use it to discover available projectId values for other tools.",
     parameters: z.object({}),
     path: () => "/v1/projects",
     annotations: { readOnlyHint: true, openWorldHint: false },
@@ -247,7 +246,8 @@ export const tools: ToolDef[] = [
       "Report it as 'leads with 0' and report strategicUrlGap as the lead it is; do not describe either as missing data, and do not treat a gap equal to the customer's own count as a glitch. " +
       "A row's contentDataAvailable.reason of 'no_sitemap_published' means no working sitemap was FOUND at the locations we know of — report it as 'no sitemap we can find', never as 'they publish no sitemap'. " +
       "We re-discover sitemap locations periodically, so a competitor who moved theirs reads this way until we re-check. " +
-      "'sitemap_fetch_failed' means our fetch failed and nothing was measured — derive no content verdict at all from that row.",
+      "'sitemap_fetch_failed' means our fetch failed and nothing was measured — derive no content verdict at all from that row. " +
+      "An empty programmaticExampleUrls is not a finding of its own — it restates that row's categorizedCounts.programmatic being 0, and never means 'they publish no templated pages'.",
     parameters: z.object({
       projectId: objectId("Project ID (from list_projects)"),
     }),
@@ -276,6 +276,7 @@ export const tools: ToolDef[] = [
       "A row's contentDataAvailable.reason of 'no_sitemap_published' means no working sitemap was FOUND at the locations we know of — report it as 'no sitemap we can find', never as 'they publish no sitemap'. " +
       "We re-discover sitemap locations periodically, so a competitor who moved theirs reads this way until we re-check. " +
       "'sitemap_fetch_failed' means our fetch failed and nothing was measured — derive no content verdict at all from that row. " +
+      "An empty programmaticExampleUrls is not a finding of its own — it restates that row's categorizedCounts.programmatic being 0, and never means 'they publish no templated pages'. " +
       "A run that finished but produced no summary answers 404 run_not_summarized. " +
       "That is different from run_not_found: the run exists, it simply has nothing to report. " +
       "Say the run produced no data; do not describe it as missing, and do not fill it in with zeros.",
@@ -436,7 +437,6 @@ export const tools: ToolDef[] = [
     name: "get_ai_visibility_dashboard",
     description:
       "Get the latest AI Visibility data for all competitors. " +
-      "This is CompetLab's unique dimension — no other CI platform tracks which brands AI models recommend. " +
       "Returns the MARKET MAP under summary.marketMap — which companies the AI models recommend in this project's category, how often each is named over the last few checks, where the customer sits among them — plus AI Visibility Score (0-100), Mention Rate (share of the check's counted answers that mention the brand), per-model breakdowns (ChatGPT, Claude, Gemini, Perplexity, and Google AI Overviews), and this check's competitor rows. " +
       "LEAD WITH THE MARKET — after reading summary.promptMarket: unless its state is rivals_named_in_most_answers, say the prompts may not describe this project's market and do not lead with the map. " +
       "Otherwise: 'Nine companies make up this market as the AI models draw it (marketMap.coreSize); the customer is one of them, 7th of 9 by how often it is named (the customer's row has isOwn=true and rankByPresence).' Presence is a share of the answers analysed (marketMap.answersReceived) — never of queries sent, never a probability — and every presence ships with presenceLow/presenceHigh: two brands whose ranges overlap are NOT ordered, and rankByPresence is shared across ties, so never break a tie or call one of them ahead. " +
@@ -451,7 +451,7 @@ export const tools: ToolDef[] = [
       "Each check asks every prompt in the project against every AI model it was dispatched to — 5 today, but a check keeps the model set it ran with — and every rate divides by totalQueries — the answers that came back, a count this tool returns; the number of queries sent is not returned at all. " +
       "The score counts only the top 5 positions in an answer, evenly spaced — first place the most, the last scoring position the least — and nothing below them. " +
       "It is a reading of WHERE a brand lands when it is named, never of who is ahead: a standing claim — \"you lead\", \"you trail\", \"the leader is X\" — rests on how often each brand is named (presence on the market map, or mentionRate within one check) and never on this score, which can favour a brand named half as often. " +
-      "A score of 0 for a brand the answers did name means it sat only in the tail of AI recommendations — below the top 5, or too seldom inside it for the average to register. " +
+      "A score of 0 for a brand the answers did name means it was named only below the top 5, or too seldom inside them for the average to register. " +
       "Read mentionRate beside a 0 score: a non-zero rate means the brand was named, and a 0 rate means no counted answer named it. " +
       "The competitor rows matter most here: they name other companies, so reporting a 0 score as 'never named' is a false claim about a third party published under CompetLab's name. " +
       "Checks published under the full-coverage gate were read for every query they asked — a usable answer came back, or the model was read and had none to show (noAnswerShown, the third query state beside answers and unansweredQueries: read, nothing shown, excluded from every count, not a failure); checks published before that gate stay published and can have been scored over fewer answers, and nothing here says which kind a given check is. " +
@@ -496,8 +496,10 @@ export const tools: ToolDef[] = [
             "Set true to also get what the models actually said — every prompt sent, and every brand each model named in rank order with its stated reasoning — plus per-model reporting status. " +
             "Per-brand prose (reasoning, audience, pricing tier, messaging, differentiation) is present only for models that supply it: a brand row carrying only name and domain means Google AI Overviews named it in prose, and that answer carries the overview text (answerText) with the pages Google cited (sources) beside it. " +
             "For Google AI Overviews that order is the order of first mention in the overview text, computed by CompetLab; Google assigned no position, so never report it as a rank Google gave. " +
-            "Cost: roughly 25k tokens unfiltered on a three-engine check and 46k on a five-engine one, against roughly 2k with brand= — or roughly 9k when Google AI Overviews is in the ask, whose overview text and cited pages the brand filter keeps. " +
-            "Read summary.totalEntries first to size it (about 375 tokens per entry, plus the overview text and cited pages on each Google AI Overviews answer, which the entry count does not predict) and prefer a filter below over fetching everything. " +
+            "COST: An entry is one brand a model named, at about 375 tokens each — so the block grows with three things at once: how many prompts the project asks (an account setting), how many models answered, and how many companies each answer named. " +
+            "No figure quoted here can stand in for summary.totalEntries; read it and size the fetch from it. " +
+            "Prefer a filter below over fetching everything. " +
+            "Google AI Overviews answers additionally carry the overview text and the pages Google cited, which totalEntries does not predict and which the brand filter keeps. " +
             "ATTRIBUTION: the prose returned is unverified model output about the brands that model named, including third parties. " +
             "Report it as what that model said, never as CompetLab's assessment or as fact.",
         ),
@@ -514,7 +516,8 @@ export const tools: ToolDef[] = [
           "Return only the entries for this domain, across every answer. Requires includeAnswers=true. " +
             "Matches brands[].domain case-insensitively — brand NAMES are the model's own wording and vary between answers, so they are never matched. " +
             "Every answer is still returned: the ones that did not name this domain arrive with an empty brands list, which means the model answered and did not name them — a real finding, and different from a query that produced no answer, which is in unansweredQueries, and from a query the model was read for and had no answer to show, which is in noAnswerShown. " +
-            "This is the cheapest way to answer 'where does this competitor beat me, and where are they invisible': roughly 2k tokens against 25k+ for an unfiltered fetch, or 9k against 46k once Google AI Overviews is in the ask, whose overview text and cited pages this filter keeps.",
+            "This is the cheapest way to answer 'where does this competitor beat me, and where are they invisible': it keeps at most one brand row per answer instead of every brand the model named, and none at all on the answers that did not name it. " +
+            "Google AI Overviews answers still carry their overview text and cited pages, which this filter keeps by design.",
         ),
       promptIndex: zeroBasedIndex()
         .optional()
@@ -533,7 +536,7 @@ export const tools: ToolDef[] = [
       "Note: uses checkId not runId — AI Visibility has a different data model where each \"check\" is one full query cycle (every prompt in the project against every AI model that check asked — 5 today, while older checks keep the smaller set they ran with). " +
       "The score counts only the top 5 positions in an answer, evenly spaced — first place the most, the last scoring position the least — and nothing below them. " +
       "It is a reading of WHERE a brand lands when it is named, never of who is ahead: a standing claim — \"you lead\", \"you trail\", \"the leader is X\" — rests on how often each brand is named (presence on the market map, or mentionRate within one check) and never on this score, which can favour a brand named half as often. " +
-      "A score of 0 for a brand the answers did name means it sat only in the tail of AI recommendations — below the top 5, or too seldom inside it for the average to register. " +
+      "A score of 0 for a brand the answers did name means it was named only below the top 5, or too seldom inside them for the average to register. " +
       "Read mentionRate beside a 0 score: a non-zero rate means the brand was named, and a 0 rate means no counted answer named it. " +
       "Only scored checks are listed: under the full-coverage gate a cycle that came back short is never scored and does not appear here. " +
       "Checks published before that gate remain listed and can have been scored over fewer answers than they asked queries; the queries-sent figure is not returned, so a listed check cannot be shown to be fully covered. " +
@@ -556,7 +559,7 @@ export const tools: ToolDef[] = [
       "Get full detail for one AI Visibility check. " +
       "The score counts only the top 5 positions in an answer, evenly spaced — first place the most, the last scoring position the least — and nothing below them. " +
       "It is a reading of WHERE a brand lands when it is named, never of who is ahead: a standing claim — \"you lead\", \"you trail\", \"the leader is X\" — rests on how often each brand is named (presence on the market map, or mentionRate within one check) and never on this score, which can favour a brand named half as often. " +
-      "A score of 0 for a brand the answers did name means it sat only in the tail of AI recommendations — below the top 5, or too seldom inside it for the average to register. " +
+      "A score of 0 for a brand the answers did name means it was named only below the top 5, or too seldom inside them for the average to register. " +
       "These rows name other companies, so reporting a 0 as 'never named' is a false claim about a third party published under CompetLab's name. " +
       "Read mentionRate beside a 0 score: a non-zero rate means the brand was named, and a 0 rate means no counted answer named it. " +
       "Uses checkId (not runId) — AI Visibility has a different data model. " +
@@ -569,8 +572,10 @@ export const tools: ToolDef[] = [
       "That text is the MODEL'S wording about the brands it named, not CompetLab's assessment — attribute it to the model. " +
       "BEFORE REACHING FOR IT: summary.customer.perPrompt already breaks the customer's result down per prompt — a display label, which models named them, and a 0-100 position score. " +
       "It is on the plain response and costs nothing, and it answers 'which of my prompts am I losing on' outright. " +
-      "COST of the answers block: roughly 25k tokens unfiltered on a three-engine check, 46k on a five-engine one. " +
-      "Read summary.totalEntries first to size it (about 375 tokens per entry, plus the overview text and cited pages on each Google AI Overviews answer, which the entry count does not predict), then narrow: brand=<domain> returns one competitor across every answer for roughly 2k — 9k with Google AI Overviews in the ask, whose overview text and cited pages it keeps — and is the right call for 'why does this competitor beat me'; provider= returns one model; promptIndex= returns one prompt. " +
+      "COST of the answers block: An entry is one brand a model named, at about 375 tokens each — so the block grows with three things at once: how many prompts the project asks (an account setting), how many models answered, and how many companies each answer named. " +
+      "No figure quoted here can stand in for summary.totalEntries; read it and size the fetch from it. " +
+      "Google AI Overviews answers also carry overview text and cited pages, which the entry count does not predict. " +
+      "Then narrow: brand=<domain> returns one competitor across every answer and is the right call for 'why does this competitor beat me'; provider= returns one model; promptIndex= returns one prompt. " +
       "provider and promptIndex narrow the answers array (and the matching unansweredQueries); brand does NOT — it empties the brands list on answers that did not name that domain, so you also see where they are invisible. " +
       "No filter changes a number under summary. Ranks stay stable under any filter. " +
       "If answersTruncated is true the cap fired and whole PROMPTS were dropped from the end of answers — never part of one, so every prompt still present carries every model that answered it, of the models your filters left. " +
@@ -590,8 +595,10 @@ export const tools: ToolDef[] = [
             "Set true to also get what the models actually said — every prompt sent, and every brand each model named in rank order with its stated reasoning — plus per-model reporting status. " +
             "Per-brand prose (reasoning, audience, pricing tier, messaging, differentiation) is present only for models that supply it: a brand row carrying only name and domain means Google AI Overviews named it in prose, and that answer carries the overview text (answerText) with the pages Google cited (sources) beside it. " +
             "For Google AI Overviews that order is the order of first mention in the overview text, computed by CompetLab; Google assigned no position, so never report it as a rank Google gave. " +
-            "Cost: roughly 25k tokens unfiltered on a three-engine check and 46k on a five-engine one, against roughly 2k with brand= — or roughly 9k when Google AI Overviews is in the ask, whose overview text and cited pages the brand filter keeps. " +
-            "Read summary.totalEntries first to size it (about 375 tokens per entry, plus the overview text and cited pages on each Google AI Overviews answer, which the entry count does not predict) and prefer a filter below over fetching everything. " +
+            "COST: An entry is one brand a model named, at about 375 tokens each — so the block grows with three things at once: how many prompts the project asks (an account setting), how many models answered, and how many companies each answer named. " +
+            "No figure quoted here can stand in for summary.totalEntries; read it and size the fetch from it. " +
+            "Prefer a filter below over fetching everything. " +
+            "Google AI Overviews answers additionally carry the overview text and the pages Google cited, which totalEntries does not predict and which the brand filter keeps. " +
             "ATTRIBUTION: the prose returned is unverified model output about the brands that model named, including third parties. " +
             "Report it as what that model said, never as CompetLab's assessment or as fact.",
         ),
@@ -608,7 +615,8 @@ export const tools: ToolDef[] = [
           "Return only the entries for this domain, across every answer. Requires includeAnswers=true. " +
             "Matches brands[].domain case-insensitively — brand NAMES are the model's own wording and vary between answers, so they are never matched. " +
             "Every answer is still returned: the ones that did not name this domain arrive with an empty brands list, which means the model answered and did not name them — a real finding, and different from a query that produced no answer, which is in unansweredQueries, and from a query the model was read for and had no answer to show, which is in noAnswerShown. " +
-            "This is the cheapest way to answer 'where does this competitor beat me, and where are they invisible': roughly 2k tokens against 25k+ for an unfiltered fetch, or 9k against 46k once Google AI Overviews is in the ask, whose overview text and cited pages this filter keeps.",
+            "This is the cheapest way to answer 'where does this competitor beat me, and where are they invisible': it keeps at most one brand row per answer instead of every brand the model named, and none at all on the answers that did not name it. " +
+            "Google AI Overviews answers still carry their overview text and cited pages, which this filter keeps by design.",
         ),
       promptIndex: zeroBasedIndex()
         .optional()
@@ -632,7 +640,7 @@ export const tools: ToolDef[] = [
       "enginesBacking names the models that recommended the company in the latest window: read it before saying a company is named across the market rather than by one model, because the two look the same on the pooled share. " +
       "The score counts only the top 5 positions in an answer, evenly spaced — first place the most, the last scoring position the least — and nothing below them. " +
       "It is a reading of WHERE a brand lands when it is named, never of who is ahead: a standing claim — \"you lead\", \"you trail\", \"the leader is X\" — rests on how often each brand is named (presence on the market map, or mentionRate within one check) and never on this score, which can favour a brand named half as often. " +
-      "A score of 0 for a brand the answers did name means it sat only in the tail of AI recommendations — below the top 5, or too seldom inside it for the average to register. " +
+      "A score of 0 for a brand the answers did name means it was named only below the top 5, or too seldom inside them for the average to register. " +
       "Read presence beside a 0 score: a non-zero share means the company was named. " +
       "item.events is what happened on the axis, as facts: standingChanges are the customer's own zone moving and holding — the alerts the customer received, announced only once a standing has held for two checks — report them as 'your standing moved from X to Y on <date>'; incompleteCycles are checks that produced no reading (expectedAnswers minus measuredAnswers is the uncounted total, absentAnswers the part the model was read for and had none to show; report the two apart, never as a fraction); promptsLastChangedAt says when the prompts were last edited — readings before it answer different questions, so never read a move across that date as the market moving. " +
       "item.window names the checks read (from, to, checks), the answers pooled on the latest map, the checks each reading pools (checksAnalysed — quote answers and checks, never days), and the models the latest check asked. " +
@@ -878,10 +886,13 @@ export const tools: ToolDef[] = [
   {
     name: "get_briefing",
     description:
-      "Get the current state of the project's Strategic Briefing — the synthesized, prioritized analysis across 14 analysis areas: the 6 monitored dimensions it reads from your stored checks, plus 8 it researches for the briefing alone (landscape, funding, hiring/GTM, product launches and more): what changed, what it means, and what to do about it. " +
+      "Get the current state of the project's Strategic Briefing — the synthesized, prioritized analysis across 14 analysis areas: the 6 monitored dimensions it reads from your stored checks, plus 8 it researches for the briefing alone (landscape, funding, hiring/GTM, product launches and more): what changed and what it means. " +
       "This is the ANALYZED, as-of read, NOT raw monitoring — for live per-dimension data use the get_<dimension>_dashboard tools (e.g. " +
       "get_pricing_dashboard); for the monitored-competitor roster use list_competitors. " +
       "Defaults to the executive 'hub' — a cheap digest (headline, top moves, and per-dimension verdicts that name the deeper section to open next) that answers most questions in one call. " +
+      "WHAT THE EDITION RECOMMENDS DOING IS NOT IN `item`. " +
+      "Those recommendations are opened as tickets on the project's Strategic Tickets board — they land in the triage column and the team moves them from there — each carrying the dimension it came from and the edition's own estimate of the work. " +
+      "`tickets` on the response says how many this edition opened and how many now sit in each column, counted as you read — so it moves as the team works, and a recommendation the team edited or dismissed reads from the board rather than from the edition. " +
       "IMPORTANT — this returns the LATEST run in whatever state it is in. " +
       "Check meta.status: on 'done' the briefing is in `item`; on 'running' it is being generated now (meta.progress gives the step; a run typically takes about two hours — treat it as running until meta.status changes, and never report it as late or failed because of how long it has taken); on 'failed' the last attempt ended without producing an edition; on null the project has never had a briefing at all. " +
       "On 'running' or 'failed', `item` is null but an earlier edition is usually still readable — call get_briefing_history and then get_briefing_edition. " +
@@ -894,7 +905,6 @@ export const tools: ToolDef[] = [
         .array(
           z.enum([
             "hub",
-            "actions",
             "competitors",
             "deep-ai-visibility",
             "deep-ai-sources",
@@ -917,9 +927,10 @@ export const tools: ToolDef[] = [
         .describe(
           "Which briefing sections to return. " +
             "Default ['hub'] — the executive digest that orients you and points to the deeper sections by name; this alone answers most questions in one cheap call. " +
-            "Add sections only when the question needs them: 'actions' (the prioritized to-do list), 'competitors' (the rival-by-rival read), any 'deep-<dimension>' for a full dimension dive (e.g. " +
+            "Add sections only when the question needs them: 'competitors' (the rival-by-rival read), any 'deep-<dimension>' for a full dimension dive (e.g. " +
             "'deep-ai-visibility', 'deep-pricing' — 14 available; the hub's verdicts tell you which one to open), or 'all' for the entire briefing (large — export/full-read only). " +
-            "The response's `contains` array lists exactly which sections that edition actually holds, in this same vocabulary — read it instead of guessing.",
+            "The response's `contains` array lists exactly which sections that edition actually holds, in this same vocabulary — read it instead of guessing. " +
+            "What the edition recommends doing is in none of them: those recommendations are tickets on the project's board, and `tickets` on the response says how they stand.",
         ),
       includeCharts: z
         .boolean()
@@ -958,6 +969,8 @@ export const tools: ToolDef[] = [
       "Returns exactly the same shape as get_briefing, with the same 'sections' and 'includeCharts' options and the same 'hub' default. " +
       "Use this to read or quote a specific past edition — including the last readable one when get_briefing reports a 'running' or 'failed' status. " +
       "For the current state use get_briefing. " +
+      "What this edition recommended doing is not in `item`: those recommendations are tickets on the project's Strategic Tickets board, and `tickets` on the response says how many it opened and how many now sit in each column, counted as you read. " +
+      "Quote that rather than the edition when the question is what the team did about it. " +
       "A runId naming a run that failed or is still generating returns successfully with meta.status set and `item` null: that run genuinely produced no edition, which is an answer, not an error.",
     parameters: z.object({
       projectId: objectId("Project ID (from list_projects)"),
@@ -966,7 +979,6 @@ export const tools: ToolDef[] = [
         .array(
           z.enum([
             "hub",
-            "actions",
             "competitors",
             "deep-ai-visibility",
             "deep-ai-sources",
@@ -989,9 +1001,10 @@ export const tools: ToolDef[] = [
         .describe(
           "Which briefing sections to return. " +
             "Default ['hub'] — the executive digest that orients you and points to the deeper sections by name; this alone answers most questions in one cheap call. " +
-            "Add sections only when the question needs them: 'actions' (the prioritized to-do list), 'competitors' (the rival-by-rival read), any 'deep-<dimension>' for a full dimension dive (e.g. " +
+            "Add sections only when the question needs them: 'competitors' (the rival-by-rival read), any 'deep-<dimension>' for a full dimension dive (e.g. " +
             "'deep-ai-visibility', 'deep-pricing' — 14 available; the hub's verdicts tell you which one to open), or 'all' for the entire briefing (large — export/full-read only). " +
-            "The response's `contains` array lists exactly which sections that edition actually holds, in this same vocabulary — read it instead of guessing.",
+            "The response's `contains` array lists exactly which sections that edition actually holds, in this same vocabulary — read it instead of guessing. " +
+            "What the edition recommends doing is in none of them: those recommendations are tickets on the project's board, and `tickets` on the response says how they stand.",
         ),
       includeCharts: z
         .boolean()

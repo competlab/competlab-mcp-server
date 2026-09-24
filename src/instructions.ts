@@ -1,4 +1,6 @@
-// The hosted server's own description and instructions (mcp.competlab.com), kept verbatim.
+// The hosted server's own description and instructions (mcp.competlab.com), kept verbatim except the
+// Strategic Tickets paragraphs: this server does not register the ticket tools, so its instructions say
+// where they live instead of describing them.
 
 export const SERVER_DESCRIPTION =
   "Competitive intelligence for B2B SaaS — monitor competitors across tech stack, content, positioning, pricing, AI visibility (how ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews name and recommend your brand against competitors), and AI sources (the pages Perplexity and Google AI Overviews read when they answer your buyers' questions, and whether your brand is on them)";
@@ -7,10 +9,10 @@ export const SERVER_INSTRUCTIONS = `CompetLab is a competitive intelligence plat
 It monitors 6 dimensions across your competitors: Tech & Trust Profile, Content Intelligence,
 Positioning, Pricing Intelligence, AI Visibility, and AI Sources.
 
-The unique dimension is AI Visibility — it tracks which brands AI models — ChatGPT, Claude, Gemini, Perplexity, and Google AI Overviews — name
-and recommend in response to industry queries, and whether the customer is one of them — in the core, in the tail, or not named at all.
+AI Visibility is the dimension that answers who AI recommends — it tracks which brands AI models — ChatGPT, Claude, Gemini, Perplexity, and Google AI Overviews — name
+and recommend in response to industry queries, and where the customer stands among them: Core, Too early to tell, or Rarely recommended.
 Brands are ordered by how often they are named, never by position. Google AI Overviews names companies in prose and ranks nothing; we read presence from it and
-no sentiment, rationale or price signal, so it counts for presence and nothing else. No other CI platform does this.
+no sentiment, rationale or price signal, so it counts for presence and nothing else.
 
 AI Sources is its companion. For the engines that hand back the pages they retrieved while
 answering — Perplexity and Google AI Overviews — it asks a project's 8 buying questions,
@@ -22,6 +24,15 @@ list none of them produced; and COUNTS, never rates — report figures as n of N
 a percentage or a share, because the question set is small by design and a share computed from it is
 false precision. A page we could not read is listed and never counted as a page the brand
 is absent from.
+
+Strategic Tickets is the project's board — the work the team has decided to do, with an owner, a column and a
+thread. The Strategic Tickets tools, which read and work that board, are available on the hosted server at
+mcp.competlab.com only; this server does not register them.
+
+A Strategic Briefing opens its recommended work as tickets on this board. They land in triage and the team moves them from there, each carrying the
+edition it came from, the part of the analysis it belongs to and that edition's estimate of the work. They are the
+team's from that moment. The briefing itself returns no list of them: its tickets field says how many it opened and
+how many now sit in each column.
 
 READING THE DATA — this rule governs every tool below.
 
@@ -52,6 +63,9 @@ Typical workflow:
 2. Call get_project to see dimension freshness and status
 3. Call dimension dashboard tools (e.g., get_pricing_dashboard) for the latest competitive data
 4. Call list_alerts to see recent competitive changes
+5. For a one-off look at any domain — yours or a competitor's — go straight to the free tools
 
-All tools require a projectId parameter (except list_projects).
+Project tools take a projectId (get one from list_projects). The free tools need no project at all —
+check_sitemap, check_ai_crawlers and fetch_url take a domain or URL, and the tech-stack,
+trust-signals and agent-adoption scans take a domain to start and return a scanId to poll with.
 Paginated tools accept page and limit parameters — check pagination.hasMore in the response to fetch more pages.`;

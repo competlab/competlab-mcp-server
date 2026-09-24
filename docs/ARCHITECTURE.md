@@ -99,7 +99,7 @@ Common error codes:
 - **Competitors** are identified by domain and include monitored page URLs
 - **Dimensions** (AI Visibility, AI Sources, Positioning, Pricing, Content, Tech & Trust) each have their own dashboard, history, and run/check detail endpoints
 - **Alerts** are generated automatically when competitive changes are detected
-- **Strategic Briefings** are AI-generated, synthesized competitive reads across 14 dimensions — the 6 monitored ones plus 8 researched for the briefing alone: what changed, what it means, and what to do. Past editions stay readable
+- **Strategic Briefings** are AI-generated, synthesized competitive reads across 14 dimensions — the 6 monitored ones plus 8 researched for the briefing alone: what changed and what it means. Its recommendations open as tickets on the project's Strategic Tickets board, and the briefing reports how they stand. Past editions stay readable
 - **Schedules** control the monitoring frequency for each dimension
 
 All IDs are 24-character hex strings (MongoDB ObjectIds).

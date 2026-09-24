@@ -13,7 +13,7 @@
 
 > Competitive intelligence for AI agents — see where AI sends your buyers, and what to do about it.
 
-More B2B buyers are asking AI before they Google. CompetLab monitors competitors across 6 dimensions — including **AI Visibility**, which tracks which brands ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews recommend, and **AI Sources**, the pages Perplexity and Google AI Overviews read when they answer your buyers' questions. This MCP server gives your AI agent access to all of it: dashboards, historical data, alerts, and the Strategic Briefing. No other CI platform does this.
+More B2B buyers are asking AI before they Google. CompetLab monitors competitors across 6 dimensions — including **AI Visibility**, which tracks which brands ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews recommend, and **AI Sources**, the pages Perplexity and Google AI Overviews read when they answer your buyers' questions. This MCP server gives your AI agent access to all of it: dashboards, historical data, alerts, and the Strategic Briefing.
 
 ## Supported Clients
 
@@ -204,7 +204,7 @@ Competitive intelligence for the AI era: 14 dimensions — 6 monitored continuou
 | **Content**       | Sitemap analysis, content categorization (12 categories), URL changelog, content gaps                                                      |
 | **Tech & Trust**  | Tech stacks, security headers (grade A-F), trust signals (26 signals in 5 categories), per-assistant AI access                            |
 
-AI Visibility is what makes CompetLab unique — no other CI platform tracks which brands AI models recommend. AI Sources is its companion: the pages Perplexity and Google AI Overviews retrieve on the way to those answers, and whether they name you.
+AI Visibility answers who AI recommends — which brands ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews name and recommend when your buyers ask, and whether you are in the core. AI Sources is its companion: the pages Perplexity and Google AI Overviews retrieve on the way to those answers, and whether they name you.
 
 > [Start free trial](https://app.competlab.com/register) (14 days, no credit card) | [Learn more](https://competlab.com)
 
@@ -275,7 +275,7 @@ AI Visibility is what makes CompetLab unique — no other CI platform tracks whi
 
 | Tool                   | Description                                                                                                                                                              |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `get_briefing`         | Current state of the project's Strategic Briefing — what changed, what it means, and what to do. Defaults to the `hub` digest; pass `sections` to open any of the 14 `deep-<dimension>` sections |
+| `get_briefing`         | Current state of the project's Strategic Briefing — what changed, what it means, and how the tickets it opened on the board now stand. Defaults to the `hub` digest; pass `sections` to open any of the 14 `deep-<dimension>` sections |
 | `get_briefing_history` | Past briefing editions, newest first — publication date, status and headline verdict per edition                                                                         |
 | `get_briefing_edition` | One past briefing edition in full, by run ID                                                                                                                             |
 
