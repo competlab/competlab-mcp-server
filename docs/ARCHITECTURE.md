@@ -104,6 +104,26 @@ Common error codes:
 - **Strategic Tickets** are the project's board — the work the team has decided to do, in five fixed columns (`triage`, `todo`, `in_progress`, `done`, `dismissed`), each ticket with an owner, labels, a due date, effort, impact and a comment thread. The ticket tools read and write the same board the team sees in the app; writing needs a `read_write` API key
 - **Schedules** control the monitoring frequency for each dimension
 
-All IDs are 24-character hex strings (MongoDB ObjectIds).
+All IDs are 24-character hex strings (MongoDB ObjectIds). A tool that takes a ticket ID also takes the ticket's number as a person writes it, `#14`.
 
-Paginated endpoints return a `pagination` object with `page`, `limit`, `total`, and `hasMore` fields.
+Paginated endpoints return a `pagination` object with `page`, `limit`, `total`, and `hasMore` fields. The AI Visibility and AI Sources dashboards and check details, the AI Visibility history, and the Tech & Trust dashboard answer in a compact view by default, each paged list with its own `*Page` object (`offset`, `limit`, `total`, `hasMore`); `view=full` returns every row.
+
+## This Repository — the Local (stdio) Server
+
+The local server offers the hosted server's tools over stdio and calls the same REST API with the key in `COMPETLAB_API_KEY`.
+
+| File | What it holds |
+|------|---------------|
+| `src/tools.ts`, `src/instructions.ts` | Generated from the hosted server by `scripts/sync-tools.mjs`: every tool name, description, parameter and annotation, and the server's instructions, word for word, with the same JSON schemas |
+| `src/routes.ts` | Where each tool goes on the REST API. Path segments come from the tool's arguments; every other argument is the query string on a GET and the JSON body otherwise. Only the arguments the agent passed are sent, so an omitted one gets the API's own default |
+| `src/tickets.ts` | Turns a ticket's number into its ID through the ticket list's `number` filter, as the hosted server does — the REST API takes the ID alone |
+| `src/api-client.ts` | The HTTP calls to `https://api.competlab.com` |
+
+To bring it in step with the hosted server:
+
+```bash
+COMPETLAB_API_KEY=YOUR_COMPETLAB_API_KEY npm run sync   # rewrites src/tools.ts and src/instructions.ts
+npm test                                                # builds, and checks what each tool sends
+```
+
+A tool the hosted server adds needs its line in `src/routes.ts` first; `npm run sync` names any tool without one.

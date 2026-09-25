@@ -227,7 +227,7 @@ AI Visibility answers who AI recommends — which brands ChatGPT, Claude, Gemini
 | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `get_ai_visibility_dashboard`    | The market map — which companies the AI models recommend in your category, and whether you are one of them — with per-model breakdowns; optionally the models' raw answers |
 | `get_ai_visibility_history`      | Paginated history of AI Visibility checks                                                                                                                                    |
-| `get_ai_visibility_check_detail` | Full detail for one check, and optionally what each model actually said — filterable by competitor, model, or prompt                                                        |
+| `get_ai_visibility_check_detail` | Full detail for one check, and optionally what each model actually said — filterable by competitor, model, or prompt; an answers read comes without the summary unless you ask for it (`includeSummary`) |
 | `get_ai_visibility_trend`        | How the market the AI models draw has moved over a window — each company's reading now and at the start, and the difference; readable per AI model                         |
 
 ### AI Sources
@@ -236,7 +236,7 @@ AI Visibility answers who AI recommends — which brands ChatGPT, Claude, Gemini
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `get_ai_sources_dashboard`    | The pages Perplexity and Google AI Overviews read when they answer the project's buying questions, per engine — which companies each named, which pages it retrieved, and the pages naming competitors and not you |
 | `get_ai_sources_history`      | Paginated history of AI Sources checks                                                                                                                                       |
-| `get_ai_sources_check_detail` | Full detail for one AI Sources check, and optionally every answer and retrieved page — filterable by engine or question                                                     |
+| `get_ai_sources_check_detail` | Full detail for one AI Sources check, and optionally every answer and retrieved page — filterable by engine or question; an answers read comes without the summary unless you ask for it (`includeSummary`) |
 
 ### Positioning
 
@@ -275,23 +275,23 @@ AI Visibility answers who AI recommends — which brands ChatGPT, Claude, Gemini
 
 | Tool                   | Description                                                                                                                                                              |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `get_briefing`         | Current state of the project's Strategic Briefing — what changed, what it means, and how the tickets it opened on the board now stand. Defaults to the `hub` digest; pass `sections` to open any of the 14 `deep-<dimension>` sections |
+| `get_briefing`         | Current state of the project's Strategic Briefing — what changed, what it means, and what the edition did on the board: the tickets it opened, the tickets already there it commented on, and the ones it matched instead of opening a second. Defaults to the `hub` digest; pass `sections` to open any of the 14 `deep-<dimension>` sections |
 | `get_briefing_history` | Past briefing editions, newest first — publication date, status and headline verdict per edition                                                                         |
 | `get_briefing_edition` | One past briefing edition in full, by run ID                                                                                                                             |
 
 ### Strategic Tickets
 
-The project's board — the work the team has decided to do, with an owner, a column and a thread. The same tickets the team sees in the app, in five fixed columns: `triage`, `todo`, `in_progress`, `done`, `dismissed`. A Strategic Briefing opens its recommendations here, in `triage`. A `read` key lists and reads tickets; the tools that write need a `read_write` key. The ticket tools need an active subscription (`402 subscription_required` otherwise).
+The project's board — the work the team has decided to do, with an owner, a column and a thread. The same tickets the team sees in the app, in five fixed columns: `triage`, `todo`, `in_progress`, `done`, `dismissed`. Every move in a Strategic Briefing lands here — as a new ticket in `triage`, most important first, or on the ticket already there for that work — and a later edition comments on tickets already there when it measured something about them. Every tool that takes a ticket ID also takes the ticket's number as a person writes it, `#14`. A `read` key lists and reads tickets; the tools that write need a `read_write` key. The ticket tools need an active subscription (`402 subscription_required` otherwise).
 
 | Tool                    | Description                                                                                                        |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `list_tickets`          | A project's Strategic Tickets in board order — the work the team has taken on, across five fixed columns            |
+| `list_tickets`          | A project's Strategic Tickets, a page at a time — in board order, or by priority, due date or recent activity; filterable by column, owner, label, impact, effort, due date and the edition that opened them. Every page carries the total and the count per column |
 | `get_ticket`            | One ticket in full — description, labels, owner, due date, effort, impact and how long its thread is               |
 | `create_ticket`         | Open a ticket on a project's board. Needs a read_write API key                                                     |
 | `update_ticket`         | Change a ticket's title, description, labels, owner, due date, effort or impact. Needs a read_write API key         |
-| `move_ticket`           | Move a ticket to another column, or reorder it, by naming the tickets it sits between. Needs a read_write API key  |
+| `move_ticket`           | Move a ticket to another column, or reorder it — to the top or the bottom, or between two named tickets; the answer says where it landed. Needs a read_write API key |
 | `delete_ticket`         | Delete a ticket and its thread. Needs a read_write API key                                                         |
-| `list_ticket_comments`  | A ticket's comment thread, oldest first                                                                            |
+| `list_ticket_comments`  | A ticket's comment thread, oldest first — each entry says whether a person, an API key or a Strategic Briefing wrote it |
 | `add_ticket_comment`    | Add a Markdown comment to a ticket's thread. Needs a read_write API key                                            |
 | `list_ticket_labels`    | A project's ticket labels — each a name and a colour                                                               |
 | `list_ticket_assignees` | Who a ticket can be assigned to — the organization's current members, by name and ID                              |
@@ -320,6 +320,8 @@ Run these against any public domain — no `projectId` needed. The sync tools re
 | `fetch_url`                 | Fetch any URL with JS rendering and bot-protection handling. Returns body, headers, cleanStats. Optional `cleanHtml` strips noise for LLM token-cost savings. 60 req/min per API key |
 
 All paginated tools accept `page` and `limit` parameters. Check `pagination.hasMore` in the response to fetch more pages.
+
+The AI Visibility and AI Sources dashboards and check details, the AI Visibility history, and the Tech & Trust dashboard answer in a compact view by default: the market map, the pages list and the brands list come one page at a time, with your own row — and, on the market map, every tracked competitor's — always on the page and a `*Page` object (`offset`, `limit`, `total`, `hasMore`) saying how many rows there are. Pass `view=full` for every row in one response. Every one of these responses opens with `readingGuide`, the reading rules for its fields.
 
 Responses pass through from the CompetLab API unchanged, and the server's instructions tell your agent how to read them — above all, `null` means CompetLab did not measure a value, never zero or "no".
 

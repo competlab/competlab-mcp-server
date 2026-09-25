@@ -1,14 +1,16 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { z } from "zod";
+import { z } from "zod/v4";
 import { tools } from "./tools.js";
+import { routes } from "./routes.js";
 import { apiGet, apiSend } from "./api-client.js";
+import { moveTicket, resolveTicketId } from "./tickets.js";
 import { SERVER_DESCRIPTION, SERVER_INSTRUCTIONS } from "./instructions.js";
 
 const server = new McpServer(
   {
     name: "competlab",
-    version: "3.1.0",
+    version: "4.0.0",
     description: SERVER_DESCRIPTION,
   },
   { instructions: SERVER_INSTRUCTIONS },
@@ -17,6 +19,10 @@ const server = new McpServer(
 // ── Tools ───────────────────────────────────────────────────
 
 for (const tool of tools) {
+  const route = routes[tool.name];
+  if (!route) throw new Error(`No route for ${tool.name} in src/routes.ts`);
+  const pathKeys = [...route.path.matchAll(/\{(\w+)\}/g)].map((m) => m[1]);
+
   server.registerTool(
     tool.name,
     {
@@ -25,21 +31,23 @@ for (const tool of tools) {
       ...(tool.annotations ? { annotations: tool.annotations } : {}),
     },
     async (args: Record<string, any>) => {
-      const path = tool.path(args);
-      const query: Record<string, any> = {};
-      for (const key of tool.queryParams ?? []) {
-        if (args[key] !== undefined) query[key] = args[key];
+      // Only the arguments the agent passed are sent: an omitted one is the API's own default.
+      const rest: Record<string, any> = {};
+      for (const [key, value] of Object.entries(args)) {
+        if (value !== undefined && !pathKeys.includes(key)) rest[key] = value;
       }
+      const values: Record<string, string> = { ...args };
+      if (tool.name === "move_ticket") return moveTicket(args.projectId, args.ticketId, rest);
+      if (pathKeys.includes("ticketId")) {
+        const ticket = await resolveTicketId(args.projectId, args.ticketId);
+        if ("error" in ticket) return ticket.error;
+        values.ticketId = ticket.id;
+      }
+      const path = route.path.replace(/\{(\w+)\}/g, (_, key: string) => encodeURIComponent(values[key]));
 
-      if (tool.method === "DELETE") return apiSend("DELETE", path);
-      if (tool.method === "POST" || tool.method === "PATCH") {
-        const body: Record<string, unknown> = {};
-        for (const key of tool.bodyParams ?? []) {
-          if (args[key] !== undefined) body[key] = args[key];
-        }
-        return apiSend(tool.method, path, body);
-      }
-      return apiGet(path, Object.keys(query).length ? query : undefined);
+      if (route.method === "DELETE") return apiSend("DELETE", path);
+      if (route.method === "POST" || route.method === "PATCH") return apiSend(route.method, path, rest);
+      return apiGet(path, Object.keys(rest).length ? rest : undefined);
     },
   );
 }

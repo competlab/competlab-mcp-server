@@ -2,7 +2,7 @@ const API_BASE = "https://api.competlab.com";
 // The hosted server's HTTP client timeout. fetch_url accepts caller budgets up to 120s.
 const TIMEOUT_MS = 120_000;
 
-type McpResponse = {
+export type McpResponse = {
   content: Array<{ type: "text"; text: string }>;
   isError?: true;
 };
