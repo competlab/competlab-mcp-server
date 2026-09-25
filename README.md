@@ -34,7 +34,7 @@ Two ways to connect — pick the one that fits your setup:
 | ------------- | ---------------------------------------------------------- | ------------------------------------- |
 | **Transport** | Streamable HTTP                                            | stdio                                 |
 | **Setup**     | Zero install — just add URL                                | `npm install && npm run build`        |
-| **Best for**  | Most users — Claude Code, Cursor, VS Code, Windsurf, Cline | Claude Desktop, Glama, or offline use |
+| **Best for**  | Most users — Claude Code, Cursor, VS Code, Windsurf, Cline | Claude Desktop, Glama, or running the process yourself |
 
 Get your API key: [app.competlab.com](https://app.competlab.com/register) > Organization Settings > API Keys
 
