@@ -234,7 +234,7 @@ AI Visibility answers who AI recommends — which brands ChatGPT, Claude, Gemini
 
 | Tool                          | Description                                                                                                                                                                  |
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `get_ai_sources_dashboard`    | The pages Perplexity and Google AI Overviews read when they answer the project's buying questions, per engine — which companies each named, which pages it retrieved, and the pages naming competitors and not you |
+| `get_ai_sources_dashboard`    | The pages Perplexity and Google AI Overviews read when they answer the project's buying questions, per engine — which companies each named, which pages it retrieved, and the pages naming other companies and not you |
 | `get_ai_sources_history`      | Paginated history of AI Sources checks                                                                                                                                       |
 | `get_ai_sources_check_detail` | Full detail for one AI Sources check, and optionally every answer and retrieved page — filterable by engine or question; an answers read comes without the summary unless you ask for it (`includeSummary`) |
 

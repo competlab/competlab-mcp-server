@@ -539,7 +539,7 @@ export const tools: ToolDef[] = [
   {
     name: "get_ai_sources_dashboard",
     description:
-      "The latest AI Sources: which pages Perplexity and Google AI Overviews RETRIEVED when answering this project's 8 buying questions, which companies each named, and which pages name the customer's competitors and not the customer. " +
+      "The latest AI Sources: which pages Perplexity and Google AI Overviews RETRIEVED when answering this project's 8 buying questions, which companies each named, and which pages name other companies and not the customer. " +
       "In compact view summary.brands and summary.pages are pages (brandsOffset/brandsLimit, pagesOffset/pagesLimit, pagesHost=<host> for one host's pages), each with its *Page {offset, limit, total, hasMore}; the customer's brand row is always included and coreHosts[] carries pageUrls, not page rows. " +
       "view=full returns every row. " +
       "Compact runs 30,000-70,000 characters; full, 250,000-450,000.\n" +
@@ -578,7 +578,7 @@ export const tools: ToolDef[] = [
           "full returns every row in one response: up to about 200,000 characters on AI Visibility and 450,000 on AI Sources. " +
           "Paging parameters with view=full are refused (paging_requires_compact_view)."),
       pagesHost: z.string().min(1).max(253).optional().describe("Return only the pages on this host, as named on summary.coreHosts[]. " +
-          "The way to see which pages on a core host name the customer or its competitors. " +
+          "The way to see which pages on a core host name the customer or other companies. " +
           "Page counts stay per engine."),
       pagesOffset: numberish(0).optional().describe("summary.pages rows to skip in compact view (0-based). " +
           "summary.pagesPage.hasMore says a next page exists."),
@@ -648,7 +648,7 @@ export const tools: ToolDef[] = [
           "full returns every row in one response: up to about 200,000 characters on AI Visibility and 450,000 on AI Sources. " +
           "Paging parameters with view=full are refused (paging_requires_compact_view)."),
       pagesHost: z.string().min(1).max(253).optional().describe("Return only the pages on this host, as named on summary.coreHosts[]. " +
-          "The way to see which pages on a core host name the customer or its competitors. " +
+          "The way to see which pages on a core host name the customer or other companies. " +
           "Page counts stay per engine."),
       pagesOffset: numberish(0).optional().describe("summary.pages rows to skip in compact view (0-based). " +
           "summary.pagesPage.hasMore says a next page exists."),

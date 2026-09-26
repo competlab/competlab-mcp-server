@@ -10,7 +10,7 @@ import { SERVER_DESCRIPTION, SERVER_INSTRUCTIONS } from "./instructions.js";
 const server = new McpServer(
   {
     name: "competlab",
-    version: "4.0.0",
+    version: "4.0.1",
     description: SERVER_DESCRIPTION,
   },
   { instructions: SERVER_INSTRUCTIONS },
@@ -113,7 +113,7 @@ server.registerPrompt(
             "Follow this workflow:",
             "1. Call get_ai_visibility_dashboard. Read summary.promptMarket first, then lead with the market map (summary.marketMap): which companies ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews recommend in this category, how often each is named, and where the brand sits among them.",
             "2. Call get_ai_visibility_trend to see how that market has moved over the window. Report a rise or a fall only where presenceChangeSeparable is true.",
-            "3. Call get_ai_sources_dashboard to see which pages Perplexity and Google AI Overviews retrieve when they answer this project's buying questions, and which of them name competitors and not the brand.",
+            "3. Call get_ai_sources_dashboard to see which pages Perplexity and Google AI Overviews retrieve when they answer this project's buying questions, and which of them name other companies and not the brand.",
             "",
             "Provide a report covering:",
             "- Where the brand stands on the market map, and which companies make up its core",
