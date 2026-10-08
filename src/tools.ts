@@ -782,7 +782,8 @@ export const tools: ToolDef[] = [
       "It describes how pages are generated, not their purpose — example URLs ship in `insights.sampleUrlsByCategory`.",
     parameters: z.object({
       domain: z.string().describe("Domain to scan, e.g. " +
-          "example.com"),
+          "example.com. " +
+          "Runs on CompetLab's side, so the key's organization needs a plan; without one the call answers 402 and nothing runs."),
       sitemapUrl: z.string().url().optional().describe("Optional full URL to a specific sitemap (with http:// or https:// prefix). " +
           "Short-circuits discovery."),
     }),
@@ -801,7 +802,8 @@ export const tools: ToolDef[] = [
       "A failed read is not an open site.",
     parameters: z.object({
       domain: z.string().describe("Domain to scan, e.g. " +
-          "example.com"),
+          "example.com. " +
+          "Runs on CompetLab's side, so the key's organization needs a plan; without one the call answers 402 and nothing runs."),
       industry: z.enum(["news-media","arts-entertainment","law-government","finance-healthcare","saas-tech","ecommerce","other"]).optional().describe("Industry context for benchmark comparison."),
     }),
     annotations: {readOnlyHint: true, openWorldHint: true},
@@ -814,7 +816,8 @@ export const tools: ToolDef[] = [
       "Optional `cleanHtml` strips HTML noise while preserving text content — token-cost win for LLM consumption.",
     parameters: z.object({
       url: z.string().url().describe("Target URL to fetch. " +
-          "Must use http:// or https:// and resolve to a public host."),
+          "Must use http:// or https:// and resolve to a public host. " +
+          "Runs on CompetLab's side, so the key's organization needs a plan; without one the call answers 402 and nothing runs."),
       bodyNeeded: z.boolean().optional().describe("Include `body` and `contentType` in the response. " +
           "Defaults to service-controlled value when omitted."),
       headersNeeded: z.boolean().optional().describe("Include `headers` and `headersAvailable` in the response. " +
@@ -842,7 +845,8 @@ export const tools: ToolDef[] = [
       "Typical completion: 30-90 seconds.",
     parameters: z.object({
       domain: z.string().describe("Domain to scan, e.g. " +
-          "example.com"),
+          "example.com. " +
+          "Runs on CompetLab's side, so the key's organization needs a plan; without one the call answers 402 and nothing runs."),
     }),
     annotations: {readOnlyHint: false, openWorldHint: true},
   },
@@ -875,7 +879,8 @@ export const tools: ToolDef[] = [
       "Typical completion: 30-90 seconds.",
     parameters: z.object({
       domain: z.string().describe("Domain to scan, e.g. " +
-          "example.com"),
+          "example.com. " +
+          "Runs on CompetLab's side, so the key's organization needs a plan; without one the call answers 402 and nothing runs."),
     }),
     annotations: {readOnlyHint: false, openWorldHint: true},
   },
@@ -906,7 +911,8 @@ export const tools: ToolDef[] = [
       "Typical completion: 30-90 seconds.",
     parameters: z.object({
       domain: z.string().describe("Domain to scan, e.g. " +
-          "example.com"),
+          "example.com. " +
+          "Runs on CompetLab's side, so the key's organization needs a plan; without one the call answers 402 and nothing runs."),
     }),
     annotations: {readOnlyHint: false, openWorldHint: true},
   },
