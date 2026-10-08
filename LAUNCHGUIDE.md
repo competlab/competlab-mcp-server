@@ -115,6 +115,6 @@ Built for product marketers, competitive intelligence analysts, and growth teams
 
 ## Pricing
 
-MCP access is **included with every CompetLab subscription** ($99/mo). Free 14-day trial includes full MCP access with all 48 tools.
+MCP access comes with every CompetLab plan and with the free 14-day trial.
 
 No additional fees for MCP usage. No per-call pricing.

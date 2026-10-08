@@ -363,7 +363,7 @@ One API key covers your entire organization. Most tools are read-only; the three
 
 ### Pricing
 
-MCP access is included with every CompetLab subscription ($99/mo). Free trial includes full MCP access.
+MCP access comes with every CompetLab plan and with the free 14-day trial.
 
 ## Troubleshooting
 
