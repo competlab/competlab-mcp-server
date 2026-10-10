@@ -193,7 +193,7 @@ See [examples/](./examples/) for ready-to-paste config files for each client.
 
 ## What is CompetLab?
 
-Competitive intelligence for the AI era: 14 dimensions — 6 monitored continuously, plus 8 leading-edge dimensions researched for the monthly Strategic Briefing. The six monitored dimensions:
+Competitive intelligence for the AI era: 14 dimensions — 6 monitored continuously, plus 8 leading-edge dimensions researched for a Strategic Briefing every month, or every two weeks on Process. The six monitored dimensions:
 
 | Dimension         | What It Tracks                                                                                                                             |
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |

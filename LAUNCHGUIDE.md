@@ -33,15 +33,15 @@ Structured metadata for MCP directories and marketplace submissions.
 
 ### Short Description (250 chars)
 
-> CompetLab tracks where you stand as buyers ask ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews who to use — then hands you a monthly Strategic Briefing on what to do. MCP tools for dashboards, alerts, and the briefing.
+> CompetLab tracks where you stand as buyers ask ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews who to use — then hands you a Strategic Briefing on what to do — every month, or every two weeks on Process. MCP tools for dashboards, alerts, and the briefing.
 
 ### Medium Description (500 chars)
 
-> CompetLab MCP Server gives AI agents competitive intelligence across 6 monitored dimensions — AI Visibility, AI Sources, Positioning, Pricing, Content, Tech & Trust — plus a monthly Strategic Briefing that covers 14. AI Visibility shows which brands ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews recommend; AI Sources, the pages Perplexity and Google AI Overviews read, and whether you are on them. 48 tools: dashboards, alerts, briefings, tickets, schedules, and 9 free tools.
+> CompetLab MCP Server gives AI agents competitive intelligence across 6 monitored dimensions — AI Visibility, AI Sources, Positioning, Pricing, Content, Tech & Trust — plus a Strategic Briefing that covers 14 — every month, or every two weeks on Process. AI Visibility shows which brands ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews recommend; AI Sources, the pages Perplexity and Google AI Overviews read, and whether you are on them. 48 tools: dashboards, alerts, briefings, tickets, schedules, and 9 free tools.
 
 ### Long Description (for G2, Capterra, full directory profiles)
 
-CompetLab is a competitive intelligence platform for B2B SaaS companies. It covers 14 dimensions — 6 monitored continuously across your competitors (AI Visibility, AI Sources, Positioning, Pricing Intelligence, Content Intelligence, and Tech & Trust Profile), plus 8 leading-edge dimensions researched for the monthly Strategic Briefing.
+CompetLab is a competitive intelligence platform for B2B SaaS companies. It covers 14 dimensions — 6 monitored continuously across your competitors (AI Visibility, AI Sources, Positioning, Pricing Intelligence, Content Intelligence, and Tech & Trust Profile), plus 8 leading-edge dimensions researched for a Strategic Briefing every month, or every two weeks on Process.
 
 The MCP server exposes 48 tools that let AI agents work with the full CompetLab platform: list projects and competitors, pull dashboard data for all 6 monitored dimensions, review historical trends, check alerts, read the Strategic Briefing and its past editions, read and work the project's Strategic Tickets board, see monitoring schedules, and run 9 free no-setup tools against any public domain (sitemap analysis, AI-crawler access checks, tech-stack detection, trust-signals analysis, Agent Adoption Checks, URL fetch with JS rendering).
 
