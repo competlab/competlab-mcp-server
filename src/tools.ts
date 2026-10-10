@@ -50,7 +50,8 @@ export const tools: ToolDef[] = [
   {
     name: "list_projects",
     description:
-      "List all accessible projects with status, competitor count, and last monitored timestamp. " +
+      "List all accessible projects with status, plan, competitor count, and last monitored timestamp. " +
+      "The project's plan: `trial`; `monitor`; `process`; `kept` — monitoring stopped, everything measured stays readable; `client` — a project on an Agency's monitored slot, run as Monitor; `pitch` — ran everything once and is not monitored. " +
       "This is the starting point — use it to discover available projectId values for other tools.",
     parameters: z.object({}),
     annotations: {readOnlyHint: true, openWorldHint: false},
@@ -58,7 +59,8 @@ export const tools: ToolDef[] = [
   {
     name: "get_project",
     description:
-      "Get project details including per-dimension monitoring freshness (techTrust, content, positioning, pricing, aiVisibility), AI monitoring prompts, and overall status. " +
+      "Get project details including per-dimension monitoring freshness (techTrust, content, positioning, pricing, aiVisibility), AI monitoring prompts, the plan, and overall status. " +
+      "The project's plan: `trial`; `monitor`; `process`; `kept` — monitoring stopped, everything measured stays readable; `client` — a project on an Agency's monitored slot, run as Monitor; `pitch` — ran everything once and is not monitored. " +
       "Use this to check when each dimension last produced data. " +
       "For aiVisibility that timestamp is the last check that published a measurement — a cycle that came back short is abandoned and never moves it, so neither an unchanged timestamp nor null proves nothing ran; get_ai_visibility_dashboard reports that case in latestCheckDataAvailable, and get_ai_visibility_trend reports it under events.incompleteCycles when nothing has ever published.",
     parameters: z.object({
