@@ -375,7 +375,7 @@ export const tools: ToolDef[] = [
           "Set true to also get what the models actually said — every prompt sent, and every brand each model named in rank order with its stated reasoning — plus per-model reporting status. " +
           "Per-brand prose (reasoning, audience, pricing tier, messaging, differentiation) is present only for models that supply it: a brand row carrying only name and domain means Google AI Overviews named it in prose, and that answer carries the overview text (answerText) with the pages Google cited (sources) beside it. " +
           "For Google AI Overviews that order is the order of first mention in the overview text, computed by CompetLab; Google assigned no position, so never report it as a rank Google gave. " +
-          "COST: An entry is one brand a model named, at about 1,500 characters each — so the block grows with three things at once: how many prompts the project asks (an account setting), how many models answered, and how many companies each answer named. " +
+          "COST: An entry is one brand a model named, at about 1,500 characters each — so the block grows with three things at once: how many prompts the project asks — 8 on every plan and in the trial — times five models, how many models answered, and how many companies each answer named. " +
           "No figure quoted here can stand in for summary.totalEntries; read it and size the fetch from it. " +
           "Prefer a filter below over fetching everything. " +
           "Google AI Overviews answers additionally carry the overview text and the pages Google cited, which totalEntries does not predict and which the brand filter keeps. " +
@@ -460,7 +460,7 @@ export const tools: ToolDef[] = [
           "Set true to also get what the models actually said — every prompt sent, and every brand each model named in rank order with its stated reasoning — plus per-model reporting status. " +
           "Per-brand prose (reasoning, audience, pricing tier, messaging, differentiation) is present only for models that supply it: a brand row carrying only name and domain means Google AI Overviews named it in prose, and that answer carries the overview text (answerText) with the pages Google cited (sources) beside it. " +
           "For Google AI Overviews that order is the order of first mention in the overview text, computed by CompetLab; Google assigned no position, so never report it as a rank Google gave. " +
-          "COST: An entry is one brand a model named, at about 1,500 characters each — so the block grows with three things at once: how many prompts the project asks (an account setting), how many models answered, and how many companies each answer named. " +
+          "COST: An entry is one brand a model named, at about 1,500 characters each — so the block grows with three things at once: how many prompts the project asks — 8 on every plan and in the trial — times five models, how many models answered, and how many companies each answer named. " +
           "No figure quoted here can stand in for summary.totalEntries; read it and size the fetch from it. " +
           "Prefer a filter below over fetching everything. " +
           "Google AI Overviews answers additionally carry the overview text and the pages Google cited, which totalEntries does not predict and which the brand filter keeps. " +
@@ -712,7 +712,7 @@ export const tools: ToolDef[] = [
       "What the edition recommends doing is not in `item`: it is opened as tickets on the project's Strategic Tickets board. " +
       "`tickets` says what this edition did to the board — opened, commented, alreadyOnBoard, recheckedUnchanged; a ticket in neither commented nor recheckedUnchanged was not measured by this edition. " +
       "Counted as you read (byStatus: per column now), so a moved, edited or dismissed ticket reads from the board. " +
-      "Briefings are generated automatically, roughly 30 days after the last run.",
+      "Briefings are generated automatically: 30 days after the last run on Monitor, two weeks on Process.",
     parameters: z.object({
       projectId: objectId().describe("Project ID (from list_projects)"),
       sections: z.array(z.enum(["hub","competitors","deep-ai-visibility","deep-ai-sources","deep-positioning","deep-pricing","deep-content","deep-tech-trust","deep-agent-readiness","deep-ai-ecosystem","deep-customer-voice","deep-funding-capital","deep-hiring-gtm","deep-landscape","deep-product-launches","deep-reliability-status","all"])).optional().describe("Which briefing sections to return. " +
