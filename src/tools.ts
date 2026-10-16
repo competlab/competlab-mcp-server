@@ -289,51 +289,62 @@ export const tools: ToolDef[] = [
   {
     name: "get_pricing_dashboard",
     description:
-      "The latest Pricing Intelligence for every competitor: up to 5 plans each (name, price, billing interval, summary), market statistics, and the gap analysis. " +
-      "A pricing page is the thing most likely to be missing: many vendors publish none, and many gate it.\n" +
-      "- null means WE DID NOT CHECK. " +
-      "hasFreePlan: null is never 'no free plan'; a measured false is a real finding. " +
-      "When the customer's pricing could not be analysed, every metric on summary.customer is null and pricingAnalysisAvailable says why. " +
-      "A competitor row with pricingDataAvailable has a null content and a reason (no pricing page found, the page did not respond, a problem on our side): never 'they offer no pricing'.\n" +
-      "- A null gap is not 'no gap'. " +
-      "All three gap flags are null when either side is unmeasured. " +
-      "hasPriceGap is also null below three comparable competitor prices, or when the customer's own price is not comparable, so a null hasPriceGap beside a false free-tier gap is consistent.\n" +
-      "- marketAvgPrice and pricePositionPercent are null below three comparable prices: 'not enough market to average', never zero.\n" +
-      "- COMPARABLE means fixed monthly amounts in ONE currency and ONE licensed unit. " +
-      "marketPricingUnit names the unit ('flat', 'per-seat', 'per-license'); always state it with the average. " +
-      "Compare summary.customer.popularPlanUnit with it first: when they differ, pricePositionPercent is null for that reason, not because anything failed.\n" +
-      "- Runs recorded before unit grouping carry no marketPricingUnit and their averages may mix units: say so rather than quoting a like-for-like market price.",
+      "The latest pricing check of a project: what each company charges as a visitor from the US sees it, what typical buyer setups cost cheapest first with the customer's place, what changed, what pages say about the customer, and companies closing, renamed or bought.\n" +
+      "- null means WE DID NOT MEASURE IT, never 'no prices' or zero: a company's facts are null when no read gave any (factsAvailable says why); read is null unless state is read. " +
+      "A key missing from a fact means the page does not say it. " +
+      "A price whose currency is null is an amount the check could not place: never compare it.\n" +
+      "- Prices are each company's own amount and currency, with period and billed: never convert, add up or average them. " +
+      "altPrice is the other billing's price.\n" +
+      "- setups: the row order is the only ranking; the customer's place is customerRank of of (\"2nd cheapest of 3\"). " +
+      "Never rank companies by comparing amounts yourself.\n" +
+      "- changes: confirmed changes at tracked companies, records included. " +
+      "level: now = \"Tell me now\", this_week = \"Tell me this week\", record = \"Keep a record\" (stored, never sent on any channel); from and to, previousReadAt and readAt (the two reads compared), quoteBefore and quoteAfter (the page's words, verbatim), pageUrl (the live page). " +
+      "Listed only after it held on a second read. " +
+      "Companies closing, renamed or bought are in marketEvents, never in changes.\n" +
+      "- aboutYou: what pages say about the customer: an offer to its users to switch, a listing misquoting its price, a ticket on its board quoting a line gone from its page.\n" +
+      "- companies[].state: read, could_not_read (shown as its last read, shownAsReadAt), never_read, no_page. " +
+      "egress us = read as a visitor from the US, eu = from Germany.\n" +
+      "- partial true: the check ran out of time; what is listed holds.\n" +
+      "- 404 no_data_available: no pricing check has completed yet.\n" +
+      "Field rules not listed here arrive in readingGuide, the first field of every response.",
     parameters: z.object({
       projectId: objectId().describe("Project ID (from list_projects)"),
+      view: z.enum(["compact","full"]).optional().describe("compact or full; omit for the server's default, compact. " +
+          "compact trims each company's facts to what it sells and its price; full adds the page's words, where and when each fact was read, and every plan column (seats, setup fee, AI, limits)."),
     }),
     annotations: {readOnlyHint: true, openWorldHint: false},
   },
   {
     name: "get_pricing_history",
     description:
-      "Get paginated history of Pricing Intelligence monitoring runs. " +
-      "Check pagination.hasMore to fetch additional pages. " +
-      "Same summary shape and same reading rule as get_pricing_dashboard: a null is a run whose pricing we could not analyze, never a zero or a no. " +
-      "Do not read a run-to-run change in a null field as a competitive event.",
+      "One row per completed pricing check, newest first: the pricing pages it read and could not (pagesRead, pagesFailed), partial (it ran out of time), egress (us = as a visitor from the US, eu = from Germany), its confirmed changes in full, and marketEvents (companies closing, renamed or bought).\n" +
+      "- Each change: level: now = \"Tell me now\", this_week = \"Tell me this week\", record = \"Keep a record\" (stored, never sent on any channel); from and to, previousReadAt and readAt (the two reads compared), quoteBefore and quoteAfter (the page's words, verbatim), pageUrl (the live page). " +
+      "Listed only after it held on a second read.\n" +
+      "- since (an ISO date or date and time) keeps the checks completed at or after it: for \"what changed since 1 May\", read every row's changes.\n" +
+      "- Paged with page and limit: read pagination.hasMore.\n" +
+      "The current prices and setups are on get_pricing_dashboard; one past check's cards on get_pricing_run_detail. " +
+      "Field rules arrive in readingGuide, the first field of the response.",
     parameters: z.object({
       projectId: objectId().describe("Project ID (from list_projects)"),
       page: z.number().int().min(1).optional().describe("Page number (1-indexed, default: 1)"),
       limit: z.number().int().min(1).max(100).optional().describe("Items per page (default: 20, max: 100)"),
+      since: z.string().optional().describe("Only the checks completed at or after this moment, ISO 8601: 2026-05-01 or 2026-05-01T06:00:00Z"),
     }),
     annotations: {readOnlyHint: true, openWorldHint: false},
   },
   {
     name: "get_pricing_run_detail",
     description:
-      "Get full competitor-by-competitor data for a specific historical Pricing Intelligence run. " +
-      "Use runId values from get_pricing_history. " +
-      "Same reading rule as get_pricing_dashboard. " +
-      "Every tracked competitor appears — rows we could not measure carry a pricingDataAvailable reason and a null content rather than being omitted, so branch on it before quoting any pricing fact about that row.A run that finished but produced no summary answers 404 run_not_summarized. " +
-      "That is different from run_not_found: the run exists, it simply has nothing to report. " +
-      "Say the run produced no data; do not describe it as missing, and do not fill it in with zeros.",
+      "One past pricing check (runId from get_pricing_history), in exactly get_pricing_dashboard's shape and read the same way: null is not measured (facts null with factsAvailable; read null unless state is read); prices are each company's own, never converted or averaged; the setups' row order is the only ranking; changes carry level: now = \"Tell me now\", this_week = \"Tell me this week\", record = \"Keep a record\" (stored, never sent on any channel). " +
+      "view works as on the dashboard.\n" +
+      "- 400 invalid_run_id: the id is malformed. " +
+      "404 run_not_found: no completed pricing check with that id in this project.\n" +
+      "Field rules arrive in readingGuide, the first field of the response.",
     parameters: z.object({
       projectId: objectId().describe("Project ID (from list_projects)"),
       runId: objectId().describe("Run ID (from get_pricing_history)"),
+      view: z.enum(["compact","full"]).optional().describe("compact or full; omit for the server's default, compact. " +
+          "compact trims each company's facts to what it sells and its price; full adds the page's words, where and when each fact was read, and every plan column (seats, setup fee, AI, limits)."),
     }),
     annotations: {readOnlyHint: true, openWorldHint: false},
   },
@@ -671,20 +682,23 @@ export const tools: ToolDef[] = [
     name: "list_alerts",
     description:
       "Get paginated competitive alerts — detected changes across all monitored dimensions. " +
-      "Filter by dimension (tech-trust, content, positioning, pricing, ai-visibility, ai-sources), severity (critical, high, medium, info), and/or competitorId. " +
+      "Filter by dimension (tech-trust, content, positioning, pricing, ai-visibility, ai-sources), severity (critical, high, medium, info), level (now, this_week, record), and/or competitorId. " +
       "Alerts include change diffs and action hints. " +
+      "A pricing alert carries a level in the customer's words — now (tell me now), this_week (tell me this week), record (keep a record: stored, never sent to any channel) — every level is listed here; its title says what changed from what to what with the dates, detail is one more sentence, actionHint is empty, and context.pricing (version 4) holds change (from, to, readAt and previousReadAt, pageUrl, quoteBefore and quoteAfter verbatim) or marketEvent (a company closing, renamed or bought). " +
       "AI Visibility alerts report who the AI models recommend, never score movement. " +
       "Read alertType first: own_standing_changed is the customer's own standing, rival_standing_changed a tracked competitor's, untracked_brand_recommended a company not on the competitor list now named in at least a quarter of answers (even allowing for how few answers there are), prompt_market_changed the prompt-market reading. " +
       "context.standingChange carries the reading before and after: brand.isOwn and brand.isTracked say whose it is; presence, presenceLow and presenceHigh are whole percents (0–100) of the answers analysed, and the zone is decided on that range, never on presence alone; before is null when the brand was named in no answer of that earlier window — a measured absence, not missing data; the zone token names a condition, not a verdict. " +
       "Never subtract two presences, and never order two brands whose ranges overlap. " +
       "context.promptMarketChange.explanation.text is the sentence to quote. " +
-      "An alert is written once and never revised: quote its numbers as of its createdAt, not as the current state.",
+      "An alert is written once and never revised: quote its numbers as of its createdAt, not as the current state. " +
+      "readingGuide, first, carries the field rules.",
     parameters: z.object({
       projectId: objectId().describe("Project ID (from list_projects)"),
       page: z.number().int().min(1).optional().describe("Page number (1-indexed, default: 1)"),
       limit: z.number().int().min(1).max(100).optional().describe("Items per page (default: 20, max: 100)"),
       dimension: z.enum(["tech-trust","content","positioning","pricing","ai-visibility","ai-sources"]).optional().describe("Filter by dimension"),
       severity: z.enum(["critical","high","medium","info"]).optional().describe("Filter by severity level"),
+      level: z.enum(["now","this_week","record"]).optional().describe("Filter by level (pricing): now = tell me now, this_week = tell me this week, record = keep a record (never sent to any channel)"),
       competitorId: z.string().optional().describe("Filter by competitor ID (from list_competitors)"),
     }),
     annotations: {readOnlyHint: true, openWorldHint: false},

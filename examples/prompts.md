@@ -60,9 +60,9 @@ Writing to the board (create, update, move, delete, comment) needs a `read_write
 
 > "Compare pricing plans across all competitors — who offers what at each tier?"
 
-> "Show me critical pricing alerts from the last 7 days"
+> "Show me the pricing changes marked Tell me now from the last 7 days"
 
-> "Pull the pricing gap analysis — where are we over/under-priced?"
+> "Where do I stand on price — what do typical setups cost, cheapest first, and where am I among them?"
 
 ## Content Intelligence
 
