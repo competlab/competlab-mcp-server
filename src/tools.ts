@@ -289,24 +289,25 @@ export const tools: ToolDef[] = [
   {
     name: "get_pricing_dashboard",
     description:
-      "The latest pricing check of a project: what each company charges as a visitor from the US sees it, what typical buyer setups cost cheapest first with the customer's place, what changed, what pages say about the customer, and companies closing, renamed or bought.\n" +
-      "- null means WE DID NOT MEASURE IT, never 'no prices' or zero: a company's facts are null when no read gave any (factsAvailable says why); read is null unless state is read. " +
+      "The latest pricing check of a project: what each company charges, what typical buyer setups cost cheapest first with the customer's place, what changed, what pages say about the customer, and companies closing, renamed or bought.\n" +
+      "- null means WE DID NOT MEASURE IT, never 'no prices' or zero: a company's facts are null when no read gave any (factsAvailable says why); read is null unless state is read, and state is why. " +
       "A key missing from a fact means the page does not say it. " +
       "A price whose currency is null is an amount the check could not place: never compare it.\n" +
       "- Prices are each company's own amount and currency, with period and billed: never convert, add up or average them. " +
       "altPrice is the other billing's price.\n" +
       "- setups: the row order is the only ranking; the customer's place is customerRank of of (\"2nd cheapest of 3\"). " +
-      "Never rank companies by comparing amounts yourself.\n" +
-      "- changes: confirmed changes at tracked companies, records included. " +
-      "level: now = \"Tell me now\", this_week = \"Tell me this week\", record = \"Keep a record\" (stored, never sent on any channel); from and to, previousReadAt and readAt (the two reads compared), quoteBefore and quoteAfter (the page's words, verbatim), pageUrl (the live page). " +
-      "Listed only after it held on a second read. " +
-      "Companies closing, renamed or bought are in marketEvents, never in changes.\n" +
-      "- aboutYou: what pages say about the customer: an offer to its users to switch, a listing misquoting its price, a ticket on its board quoting a line gone from its page.\n" +
+      "Never rank companies by comparing amounts yourself. " +
+      "A row that fits with no rank could not be placed (no currency or no amount): quote its quote as it is.\n" +
+      "- changes, newest first, records included. " +
+      "level: now = \"Tell me now\", this_week = \"Tell me this week\", record = \"Keep a record\" (stored, never sent on any channel). " +
+      "kind change: from and to, previousReadAt and readAt (the two reads compared), quoteBefore and quoteAfter (the page's words, verbatim), pageUrl (the live page); listed only after it held on a second read. " +
+      "kind market_event: a company closing, renamed or bought, by its title; its words are in marketEvents.\n" +
+      "- aboutYou: what pages say about the customer: an offer to its users to switch, a listing misquoting its price, a board ticket quoting a line gone from its page.\n" +
       "- companies[].state: read, could_not_read (shown as its last read, shownAsReadAt), never_read, no_page. " +
       "egress us = read as a visitor from the US, eu = from Germany.\n" +
       "- partial true: the check ran out of time; what is listed holds.\n" +
       "- 404 no_data_available: no pricing check has completed yet.\n" +
-      "Field rules not listed here arrive in readingGuide, the first field of every response.",
+      "Other field rules arrive in readingGuide, the first field of every response.",
     parameters: z.object({
       projectId: objectId().describe("Project ID (from list_projects)"),
       view: z.enum(["compact","full"]).optional().describe("compact or full; omit for the server's default, compact. " +
@@ -317,9 +318,10 @@ export const tools: ToolDef[] = [
   {
     name: "get_pricing_history",
     description:
-      "One row per completed pricing check, newest first: the pricing pages it read and could not (pagesRead, pagesFailed), partial (it ran out of time), egress (us = as a visitor from the US, eu = from Germany), its confirmed changes in full, and marketEvents (companies closing, renamed or bought).\n" +
-      "- Each change: level: now = \"Tell me now\", this_week = \"Tell me this week\", record = \"Keep a record\" (stored, never sent on any channel); from and to, previousReadAt and readAt (the two reads compared), quoteBefore and quoteAfter (the page's words, verbatim), pageUrl (the live page). " +
-      "Listed only after it held on a second read.\n" +
+      "One row per completed pricing check, newest first: the pricing pages it read and could not (pagesRead, pagesFailed), partial (it ran out of time), egress (us = as a visitor from the US, eu = from Germany), its changes in full, and marketEvents (companies closing, renamed or bought).\n" +
+      "- Each change: level: now = \"Tell me now\", this_week = \"Tell me this week\", record = \"Keep a record\" (stored, never sent on any channel). " +
+      "kind change: from and to, previousReadAt and readAt (the two reads compared), quoteBefore and quoteAfter (the page's words, verbatim), pageUrl (the live page); listed only after it held on a second read. " +
+      "kind market_event: a company closing, renamed or bought, by its title; its words are in the row's marketEvents.\n" +
       "- since (an ISO date or date and time) keeps the checks completed at or after it: for \"what changed since 1 May\", read every row's changes.\n" +
       "- Paged with page and limit: read pagination.hasMore.\n" +
       "The current prices and setups are on get_pricing_dashboard; one past check's cards on get_pricing_run_detail. " +
