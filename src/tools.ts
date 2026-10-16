@@ -293,19 +293,18 @@ export const tools: ToolDef[] = [
       "- null means WE DID NOT MEASURE IT, never 'no prices' or zero: a company's facts are null when no read gave any (factsAvailable says why); read is null unless state is read, and state is why. " +
       "A key missing from a fact means the page does not say it. " +
       "A price whose currency is null is an amount the check could not place: never compare it.\n" +
-      "- Prices are each company's own amount and currency, with period and billed: never convert, add up or average them. " +
-      "altPrice is the other billing's price.\n" +
-      "- setups: the row order is the only ranking; the customer's place is customerRank of of (\"2nd cheapest of 3\"). " +
+      "- Prices are each company's own amount and currency, with period and billed: never convert, add up or average them.\n" +
+      "- setups: the row order is the only ranking; the customer's place is customerRank, and of is how many rows are ranked (\"2nd cheapest of 3\"). " +
       "Never rank companies by comparing amounts yourself. " +
       "A row that fits with no rank could not be placed (no currency or no amount): quote its quote as it is.\n" +
       "- changes, newest first, records included. " +
-      "level: now = \"Tell me now\", this_week = \"Tell me this week\", record = \"Keep a record\" (stored, never sent on any channel). " +
-      "kind change: from and to, previousReadAt and readAt (the two reads compared), quoteBefore and quoteAfter (the page's words, verbatim), pageUrl (the live page); listed only after it held on a second read. " +
+      "level: now = \"Tell me now\", this_week = \"Tell me this week\", record = \"Keep a record\" (stored, never sent). " +
+      "kind change: from and to, previousReadAt and readAt (the two reads compared), quoteBefore and quoteAfter (the page's words, verbatim), pageUrl; listed only after it held on a second read. " +
       "kind market_event: a company closing, renamed or bought, by its title; its words are in marketEvents.\n" +
-      "- aboutYou: what pages say about the customer: an offer to its users to switch, a listing misquoting its price, a board ticket quoting a line gone from its page.\n" +
+      "- aboutYou: what pages say about the customer: an offer to its users to switch, a listing misquoting its price, a page naming its price or plans, a board ticket quoting a line gone from its page.\n" +
       "- companies[].state: read, could_not_read (shown as its last read, shownAsReadAt), never_read, no_page. " +
       "egress us = read as a visitor from the US, eu = from Germany.\n" +
-      "- partial true: the check ran out of time; what is listed holds.\n" +
+      "- partial true: not everything read is in yet; what is listed holds.\n" +
       "- 404 no_data_available: no pricing check has completed yet.\n" +
       "Other field rules arrive in readingGuide, the first field of every response.",
     parameters: z.object({
@@ -318,7 +317,7 @@ export const tools: ToolDef[] = [
   {
     name: "get_pricing_history",
     description:
-      "One row per completed pricing check, newest first: the pricing pages it read and could not (pagesRead, pagesFailed), partial (it ran out of time), egress (us = as a visitor from the US, eu = from Germany), its changes in full, and marketEvents (companies closing, renamed or bought).\n" +
+      "One row per completed pricing check, newest first: the pricing pages it read and could not (pagesRead, pagesFailed), partial (true: not everything read is in yet; what is listed holds), egress (us = as a visitor from the US, eu = from Germany), its changes in full, and marketEvents (companies closing, renamed or bought).\n" +
       "- Each change: level: now = \"Tell me now\", this_week = \"Tell me this week\", record = \"Keep a record\" (stored, never sent on any channel). " +
       "kind change: from and to, previousReadAt and readAt (the two reads compared), quoteBefore and quoteAfter (the page's words, verbatim), pageUrl (the live page); listed only after it held on a second read. " +
       "kind market_event: a company closing, renamed or bought, by its title; its words are in the row's marketEvents.\n" +
@@ -686,7 +685,7 @@ export const tools: ToolDef[] = [
       "Get paginated competitive alerts — detected changes across all monitored dimensions. " +
       "Filter by dimension (tech-trust, content, positioning, pricing, ai-visibility, ai-sources), severity (critical, high, medium, info), level (now, this_week, record), and/or competitorId. " +
       "Alerts include change diffs and action hints. " +
-      "A pricing alert carries a level in the customer's words — now (tell me now), this_week (tell me this week), record (keep a record: stored, never sent to any channel) — every level is listed here; its title says what changed from what to what with the dates, detail is one more sentence, actionHint is empty, and context.pricing (version 4) holds change (from, to, readAt and previousReadAt, pageUrl, quoteBefore and quoteAfter verbatim) or marketEvent (a company closing, renamed or bought). " +
+      "A pricing alert carries a level in the customer's words — now is \"Tell me now\", this_week is \"Tell me this week\", record is \"Keep a record\" (stored, never sent on any channel) — every level is listed here; its title says what changed from what to what with the dates, detail is one more sentence, actionHint is empty, and context.pricing (version 4) holds change (from, to, readAt and previousReadAt, pageUrl, quoteBefore and quoteAfter verbatim) or marketEvent (a company closing, renamed or bought). " +
       "AI Visibility alerts report who the AI models recommend, never score movement. " +
       "Read alertType first: own_standing_changed is the customer's own standing, rival_standing_changed a tracked competitor's, untracked_brand_recommended a company not on the competitor list now named in at least a quarter of answers (even allowing for how few answers there are), prompt_market_changed the prompt-market reading. " +
       "context.standingChange carries the reading before and after: brand.isOwn and brand.isTracked say whose it is; presence, presenceLow and presenceHigh are whole percents (0–100) of the answers analysed, and the zone is decided on that range, never on presence alone; before is null when the brand was named in no answer of that earlier window — a measured absence, not missing data; the zone token names a condition, not a verdict. " +
@@ -700,7 +699,7 @@ export const tools: ToolDef[] = [
       limit: z.number().int().min(1).max(100).optional().describe("Items per page (default: 20, max: 100)"),
       dimension: z.enum(["tech-trust","content","positioning","pricing","ai-visibility","ai-sources"]).optional().describe("Filter by dimension"),
       severity: z.enum(["critical","high","medium","info"]).optional().describe("Filter by severity level"),
-      level: z.enum(["now","this_week","record"]).optional().describe("Filter by level (pricing): now = tell me now, this_week = tell me this week, record = keep a record (never sent to any channel)"),
+      level: z.enum(["now","this_week","record"]).optional().describe("Filter by level (pricing): now is \"Tell me now\", this_week is \"Tell me this week\", record is \"Keep a record\" (stored, never sent on any channel)"),
       competitorId: z.string().optional().describe("Filter by competitor ID (from list_competitors)"),
     }),
     annotations: {readOnlyHint: true, openWorldHint: false},
