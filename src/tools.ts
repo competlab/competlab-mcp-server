@@ -249,40 +249,63 @@ export const tools: ToolDef[] = [
   {
     name: "get_positioning_dashboard",
     description:
-      "Get the latest Positioning analysis for all competitors. " +
-      "Returns homepage messaging: page title, main headline, tagline, value proposition, primary/secondary CTAs, key offerings, target audience, main differentiator, pricing mentions, free trial info. " +
-      "When the customer’s own homepage could not be analyzed, every metric on summary.customer is null and messagingAnalysisAvailable says why — including the headline and CTA strings. " +
-      "Note the distinction those nulls preserve: a measured EMPTY STRING means we read the page and there is genuinely no call to action, which is a real finding; a null means we never read it. " +
-      "The messaging score and its gap are null on the same condition — a null gap is not a tie.",
+      "The latest positioning check of a project: what each company's homepage says of itself, which of the customer's claims others make too, what changed, what pages say about the customer, and companies closing, renamed or bought.\n" +
+      "- null means WE DID NOT MEASURE IT, never 'says nothing': a company's claims are null when nothing was measured (claimsAvailable says why); read is null unless state is read, and state is why.\n" +
+      "- A claim is the page's words, verbatim: kind (headline, subheadline, category, audience, main_button, proof, badge, feature, price, title, meta_description) and value. " +
+      "Nothing is scored, ranked or bucketed.\n" +
+      "- yourClaims: the customer's main claims; saidBy is each tracked company saying the same, in its own words. " +
+      "An empty saidBy: nobody else says it on the homepages read; never call it unique. " +
+      "For a number, report both figures, never a comparison word.\n" +
+      "- changes, newest first, records included. " +
+      "level: now = \"Tell me now\", this_week = \"Tell me this week\", record = \"Keep a record\" (stored, never sent). " +
+      "kind change: field (what moved), from and to (an empty side: added or gone), previousReadAt and readAt, quoteBefore and quoteAfter (verbatim), pageUrl; listed only after it held on a second read. " +
+      "kind market_event: a company closing, renamed or bought, by its title; its words are in marketEvents.\n" +
+      "- aboutYou: an offer to the customer's users to switch, a statement its own page says otherwise, a page about it, its comparison page beside a rival's page that now says otherwise, a board ticket quoting a line gone from its page. " +
+      "Two pages' words with their dates: report both, never judge either page.\n" +
+      "- companies[].state: read, could_not_read (shown as its last read, shownAsReadAt), never_read, no_page. " +
+      "egress us = read as a visitor from the US, eu = from Germany.\n" +
+      "- partial true: not everything read is in yet; what is listed holds.\n" +
+      "- 404 no_data_available: no check has completed yet.\n" +
+      "Other field rules arrive in readingGuide, the first field of every response.",
     parameters: z.object({
       projectId: objectId().describe("Project ID (from list_projects)"),
+      view: z.enum(["compact","full"]).optional().describe("compact or full; omit for the server's default, compact. " +
+          "compact trims each company's claims to what each claim is and its value; full adds the page's words around each claim and where and when it was read."),
     }),
     annotations: {readOnlyHint: true, openWorldHint: false},
   },
   {
     name: "get_positioning_history",
     description:
-      "Get paginated history of Positioning monitoring runs. " +
-      "Check pagination.hasMore to fetch additional pages. " +
-      "Same summary shape and same reading rule as get_positioning_dashboard: a null is a run whose homepage we could not analyze, never a zero or an empty headline.",
+      "One row per completed positioning check, newest first: the homepages it read and could not (pagesRead, pagesFailed), the pages naming the customer it read (pagesNamingYouRead), partial (true: not everything read is in yet; what is listed holds), egress (us = as a visitor from the US, eu = from Germany), its changes in full, and marketEvents (companies closing, renamed or bought).\n" +
+      "- Each change: level: now = \"Tell me now\", this_week = \"Tell me this week\", record = \"Keep a record\" (stored, never sent on any channel). " +
+      "kind change: field (what moved), from and to (an empty side is a thing added or gone), previousReadAt and readAt (the two reads compared), quoteBefore and quoteAfter (the page's words, verbatim), pageUrl (the live page); listed only after it held on a second read. " +
+      "kind market_event: a company closing, renamed or bought, by its title; its words are in the row's marketEvents.\n" +
+      "- since (an ISO date or date and time) keeps the checks completed at or after it: for \"what changed since 1 May\", read every row's changes.\n" +
+      "- Paged with page and limit: read pagination.hasMore.\n" +
+      "What each company says now and what pages say about the customer are on get_positioning_dashboard; one past check's cards on get_positioning_run_detail. " +
+      "Field rules arrive in readingGuide, the first field of the response.",
     parameters: z.object({
       projectId: objectId().describe("Project ID (from list_projects)"),
       page: z.number().int().min(1).optional().describe("Page number (1-indexed, default: 1)"),
       limit: z.number().int().min(1).max(100).optional().describe("Items per page (default: 20, max: 100)"),
+      since: z.string().optional().describe("Only the checks completed at or after this moment, ISO 8601: 2026-05-01 or 2026-05-01T06:00:00Z"),
     }),
     annotations: {readOnlyHint: true, openWorldHint: false},
   },
   {
     name: "get_positioning_run_detail",
     description:
-      "Get full competitor-by-competitor data for a specific historical Positioning run. " +
-      "Use runId values from get_positioning_history. " +
-      "Same reading rule as get_positioning_dashboard.A run that finished but produced no summary answers 404 run_not_summarized. " +
-      "That is different from run_not_found: the run exists, it simply has nothing to report. " +
-      "Say the run produced no data; do not describe it as missing, and do not fill it in with zeros.",
+      "One past positioning check (runId from get_positioning_history), in exactly get_positioning_dashboard's shape and read the same way: null is not measured (claims null with claimsAvailable; read null unless state is read); a claim is the page's words, never a summary or a score; an empty saidBy in yourClaims means nobody else says it on the homepages read; changes carry level: now = \"Tell me now\", this_week = \"Tell me this week\", record = \"Keep a record\" (stored, never sent on any channel); aboutYou is two pages' words with their dates, never a judgement of either. " +
+      "view works as on the dashboard.\n" +
+      "- 400 invalid_run_id: the id is malformed. " +
+      "404 run_not_found: no completed positioning check with that id in this project.\n" +
+      "Field rules arrive in readingGuide, the first field of the response.",
     parameters: z.object({
       projectId: objectId().describe("Project ID (from list_projects)"),
       runId: objectId().describe("Run ID (from get_positioning_history)"),
+      view: z.enum(["compact","full"]).optional().describe("compact or full; omit for the server's default, compact. " +
+          "compact trims each company's claims to what each claim is and its value; full adds the page's words around each claim and where and when it was read."),
     }),
     annotations: {readOnlyHint: true, openWorldHint: false},
   },
@@ -699,7 +722,7 @@ export const tools: ToolDef[] = [
       limit: z.number().int().min(1).max(100).optional().describe("Items per page (default: 20, max: 100)"),
       dimension: z.enum(["tech-trust","content","positioning","pricing","ai-visibility","ai-sources"]).optional().describe("Filter by dimension"),
       severity: z.enum(["critical","high","medium","info"]).optional().describe("Filter by severity level"),
-      level: z.enum(["now","this_week","record"]).optional().describe("Filter by level (pricing): now is \"Tell me now\", this_week is \"Tell me this week\", record is \"Keep a record\" (stored, never sent on any channel)"),
+      level: z.enum(["now","this_week","record"]).optional().describe("Filter by level (pricing, positioning): now is \"Tell me now\", this_week is \"Tell me this week\", record is \"Keep a record\" (stored, never sent on any channel)"),
       competitorId: z.string().optional().describe("Filter by competitor ID (from list_competitors)"),
     }),
     annotations: {readOnlyHint: true, openWorldHint: false},

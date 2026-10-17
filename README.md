@@ -199,7 +199,7 @@ Competitive intelligence for the AI era: 14 dimensions — 6 monitored continuou
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | **AI Visibility** | Which companies ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews recommend in your category, how often each is named, and where you stand |
 | **AI Sources**    | The pages Perplexity and Google AI Overviews read when they answer your buyers' questions, and whether you are on them                   |
-| **Positioning**   | Homepage messaging, value props, CTAs, target audience, differentiators                                                                    |
+| **Positioning**   | What each company says on its homepage as the page says it, what you say that nobody else does, what changed, and what pages say about you |
 | **Pricing**       | What each company charges as its own pricing page shows it, what typical buyer setups cost cheapest first and where you stand, what changed, and what pages say about you |
 | **Content**       | Sitemap analysis, content categorization (12 categories), URL changelog, content gaps                                                      |
 | **Tech & Trust**  | Tech stacks, security headers (grade A-F), trust signals (26 signals in 5 categories), per-assistant AI access                            |
@@ -240,11 +240,11 @@ AI Visibility answers who AI recommends — which brands ChatGPT, Claude, Gemini
 
 ### Positioning
 
-| Tool                         | Description                                                            |
-| ---------------------------- | ---------------------------------------------------------------------- |
-| `get_positioning_dashboard`  | Latest homepage messaging, value props, CTAs, target audience analysis |
-| `get_positioning_history`    | Paginated history of monitoring runs                                   |
-| `get_positioning_run_detail` | Full data for a specific positioning run                               |
+| Tool                         | Description |
+| ---------------------------- | ----------- |
+| `get_positioning_dashboard`  | What each company says on its homepage as the page says it, what you say that nobody else does, what changed, and what pages say about you |
+| `get_positioning_history`    | One row per positioning check with what it found changed, in full; filter by `since` |
+| `get_positioning_run_detail` | One past positioning check in full, in the dashboard's shape |
 
 ### Pricing Intelligence
 

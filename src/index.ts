@@ -10,7 +10,7 @@ import { SERVER_DESCRIPTION, SERVER_INSTRUCTIONS } from "./instructions.js";
 const server = new McpServer(
   {
     name: "competlab",
-    version: "4.1.0",
+    version: "4.2.0",
     description: SERVER_DESCRIPTION,
   },
   { instructions: SERVER_INSTRUCTIONS },

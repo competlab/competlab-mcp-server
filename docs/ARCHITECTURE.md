@@ -106,7 +106,7 @@ Common error codes:
 
 All IDs are 24-character hex strings (MongoDB ObjectIds). A tool that takes a ticket ID also takes the ticket's number as a person writes it, `#14`.
 
-Paginated endpoints return a `pagination` object with `page`, `limit`, `total`, and `hasMore` fields. The AI Visibility and AI Sources dashboards and check details, the AI Visibility history, the Tech & Trust dashboard, and the Pricing dashboard and run detail answer in a compact view by default — on AI Visibility and AI Sources each paged list with its own `*Page` object (`offset`, `limit`, `total`, `hasMore`), on Pricing each company's facts trimmed to what it sells and its price; `view=full` returns everything.
+Paginated endpoints return a `pagination` object with `page`, `limit`, `total`, and `hasMore` fields. The AI Visibility and AI Sources dashboards and check details, the AI Visibility history, the Tech & Trust dashboard, and the Pricing and Positioning dashboards and run details answer in a compact view by default — on AI Visibility and AI Sources each paged list with its own `*Page` object (`offset`, `limit`, `total`, `hasMore`), on Pricing each company's facts trimmed to what it sells and its price, on Positioning each company's claims trimmed to what each claim is and its value; `view=full` returns everything.
 
 ## This Repository — the Local (stdio) Server
 

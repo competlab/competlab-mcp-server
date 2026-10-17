@@ -78,11 +78,11 @@ Writing to the board (create, update, move, delete, comment) needs a `read_write
 
 ## Positioning
 
-> "How do competitors position themselves on their homepages?"
+> "How do competitors position themselves on their homepages? Quote each headline and who it says it is for."
 
-> "Compare our value proposition vs the top 3 competitors"
+> "Which of our homepage claims does nobody else make, and which do competitors make too?"
 
-> "What CTAs are competitors using? Any patterns?"
+> "What do pages say about us this week, and where does our own page say otherwise?"
 
 ## Tech & Trust
 
