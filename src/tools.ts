@@ -290,7 +290,7 @@ export const tools: ToolDef[] = [
     name: "get_pricing_dashboard",
     description:
       "The latest pricing check of a project: what each company charges, what typical buyer setups cost cheapest first with the customer's place, what changed, what pages say about the customer, and companies closing, renamed or bought.\n" +
-      "- null means WE DID NOT MEASURE IT, never 'no prices' or zero: a company's facts are null when no read gave any (factsAvailable says why); read is null unless state is read, and state is why. " +
+      "- null means WE DID NOT MEASURE IT, never 'no prices' or zero: a company's facts are null when nothing was measured (factsAvailable says why); read is null unless state is read, and state is why. " +
       "A key missing from a fact means the page does not say it. " +
       "A price whose currency is null is an amount the check could not place: never compare it.\n" +
       "- Prices are each company's own amount and currency, with period and billed: never convert, add up or average them.\n" +
@@ -305,7 +305,7 @@ export const tools: ToolDef[] = [
       "- companies[].state: read, could_not_read (shown as its last read, shownAsReadAt), never_read, no_page. " +
       "egress us = read as a visitor from the US, eu = from Germany.\n" +
       "- partial true: not everything read is in yet; what is listed holds.\n" +
-      "- 404 no_data_available: no pricing check has completed yet.\n" +
+      "- 404 no_data_available: no check has completed yet.\n" +
       "Other field rules arrive in readingGuide, the first field of every response.",
     parameters: z.object({
       projectId: objectId().describe("Project ID (from list_projects)"),
