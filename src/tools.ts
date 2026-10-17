@@ -261,12 +261,12 @@ export const tools: ToolDef[] = [
       "kind change: field (what moved), from and to (an empty side: added or gone), previousReadAt and readAt, quoteBefore and quoteAfter (verbatim), pageUrl; listed only after it held on a second read. " +
       "kind market_event: a company closing, renamed or bought, by its title; its words are in marketEvents.\n" +
       "- aboutYou: an offer to the customer's users to switch, a statement its own page says otherwise, a page about it, its comparison page beside a rival's page that now says otherwise, a board ticket quoting a line gone from its page. " +
-      "Two pages' words with their dates: report both, never judge either page.\n" +
+      "The pages' words with their dates: report them as they are, never judge a page.\n" +
       "- companies[].state: read, could_not_read (shown as its last read, shownAsReadAt), never_read, no_page. " +
       "egress us = read as a visitor from the US, eu = from Germany.\n" +
       "- partial true: not everything read is in yet; what is listed holds.\n" +
       "- 404 no_data_available: no check has completed yet.\n" +
-      "Other field rules arrive in readingGuide, the first field of every response.",
+      "Other field rules: readingGuide, the first field of every response.",
     parameters: z.object({
       projectId: objectId().describe("Project ID (from list_projects)"),
       view: z.enum(["compact","full"]).optional().describe("compact or full; omit for the server's default, compact. " +
@@ -277,7 +277,7 @@ export const tools: ToolDef[] = [
   {
     name: "get_positioning_history",
     description:
-      "One row per completed positioning check, newest first: the homepages it read and could not (pagesRead, pagesFailed), the pages naming the customer it read (pagesNamingYouRead), partial (true: not everything read is in yet; what is listed holds), egress (us = as a visitor from the US, eu = from Germany), its changes in full, and marketEvents (companies closing, renamed or bought).\n" +
+      "One row per completed positioning check, newest first: the homepages it read, could not read, and read with nothing to show (pagesRead, pagesFailed, pagesNotJudged), the pages naming the customer it read (pagesNamingYouRead), partial (true: not everything read is in yet; what is listed holds), egress (us = as a visitor from the US, eu = from Germany), its changes in full, and marketEvents (companies closing, renamed or bought).\n" +
       "- Each change: level: now = \"Tell me now\", this_week = \"Tell me this week\", record = \"Keep a record\" (stored, never sent on any channel). " +
       "kind change: field (what moved), from and to (an empty side is a thing added or gone), previousReadAt and readAt (the two reads compared), quoteBefore and quoteAfter (the page's words, verbatim), pageUrl (the live page); listed only after it held on a second read. " +
       "kind market_event: a company closing, renamed or bought, by its title; its words are in the row's marketEvents.\n" +
