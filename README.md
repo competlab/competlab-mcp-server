@@ -298,10 +298,10 @@ The project's board — the work the team has decided to do, with an owner, a co
 
 ### Alerts & Schedules
 
-| Tool             | Description                                                                   |
-| ---------------- | ----------------------------------------------------------------------------- |
-| `list_alerts`    | Competitive change alerts — filterable by dimension, severity, and competitor |
-| `list_schedules` | Monitoring schedules for all 6 monitored dimensions, with status and intervals |
+| Tool             | Description                                                                          |
+| ---------------- | ------------------------------------------------------------------------------------ |
+| `list_alerts`    | Competitive change alerts — filterable by dimension, severity, level, and competitor |
+| `list_schedules` | Monitoring schedules for all 6 monitored dimensions, with status and intervals       |
 
 ### Free Tools (no project setup required)
 
