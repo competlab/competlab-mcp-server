@@ -251,14 +251,15 @@ export const tools: ToolDef[] = [
     description:
       "The latest positioning check of a project: what each company's homepage says of itself, which of the customer's claims others make too, what changed, what pages say about the customer, and companies closing, renamed or bought.\n" +
       "- null means WE DID NOT MEASURE IT, never 'says nothing': a company's claims are null when nothing was measured (claimsAvailable says why); read is null unless state is read, and state is why.\n" +
-      "- A claim is the page's words, verbatim: kind (headline, subheadline, category, audience, main_button, proof, badge, feature, price, title, meta_description) and value. " +
+      "- A claim is the page's words, verbatim: its kind and value. " +
       "Nothing is scored, ranked or bucketed.\n" +
       "- yourClaims: the customer's main claims; saidBy is each tracked company saying the same, in its own words. " +
       "An empty saidBy: nobody else says it on the homepages read; never call it unique. " +
       "For a number, report both figures, never a comparison word.\n" +
       "- changes, newest first, records included. " +
       "level: now = \"Tell me now\", this_week = \"Tell me this week\", record = \"Keep a record\" (stored, never sent). " +
-      "kind change: field (what moved), from and to (an empty side: added or gone), previousReadAt and readAt, quoteBefore and quoteAfter (verbatim), pageUrl; listed once confirmed. " +
+      "kind change: field (what moved), from and to (an empty side: added or gone), previousReadAt and readAt, quoteBefore and quoteAfter (verbatim), pageUrl. " +
+      "A change is listed only after it held on a second read; a page about the customer, only when its sitemap or its own date puts it after the last check. " +
       "kind market_event: a company closing, renamed or bought, by its title; its words are in marketEvents.\n" +
       "- aboutYou: an offer to the customer's users to switch, a statement its own page says otherwise, a page about it, its comparison page beside a rival's page that now says otherwise, a board ticket quoting a line gone from its page. " +
       "The pages' words with their dates: report them as they are, never judge a page.\n" +
