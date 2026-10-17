@@ -258,7 +258,7 @@ export const tools: ToolDef[] = [
       "For a number, report both figures, never a comparison word.\n" +
       "- changes, newest first, records included. " +
       "level: now = \"Tell me now\", this_week = \"Tell me this week\", record = \"Keep a record\" (stored, never sent). " +
-      "kind change: field (what moved), from and to (an empty side: added or gone), previousReadAt and readAt, quoteBefore and quoteAfter (verbatim), pageUrl; listed only after it held on a second read. " +
+      "kind change: field (what moved), from and to (an empty side: added or gone), previousReadAt and readAt, quoteBefore and quoteAfter (verbatim), pageUrl; listed once confirmed. " +
       "kind market_event: a company closing, renamed or bought, by its title; its words are in marketEvents.\n" +
       "- aboutYou: an offer to the customer's users to switch, a statement its own page says otherwise, a page about it, its comparison page beside a rival's page that now says otherwise, a board ticket quoting a line gone from its page. " +
       "The pages' words with their dates: report them as they are, never judge a page.\n" +
@@ -279,7 +279,8 @@ export const tools: ToolDef[] = [
     description:
       "One row per completed positioning check, newest first: the homepages it read, could not read, and read with nothing to show (pagesRead, pagesFailed, pagesNotJudged), the pages naming the customer it read (pagesNamingYouRead), partial (true: not everything read is in yet; what is listed holds), egress (us = as a visitor from the US, eu = from Germany), its changes in full, and marketEvents (companies closing, renamed or bought).\n" +
       "- Each change: level: now = \"Tell me now\", this_week = \"Tell me this week\", record = \"Keep a record\" (stored, never sent on any channel). " +
-      "kind change: field (what moved), from and to (an empty side is a thing added or gone), previousReadAt and readAt (the two reads compared), quoteBefore and quoteAfter (the page's words, verbatim), pageUrl (the live page); listed only after it held on a second read. " +
+      "kind change: field (what moved), from and to (an empty side is a thing added or gone), previousReadAt and readAt (the two reads compared), quoteBefore and quoteAfter (the page's words, verbatim), pageUrl (the live page). " +
+      "A change is listed only after it held on a second read; a page about the customer, only when its sitemap or its own date puts it after the last check. " +
       "kind market_event: a company closing, renamed or bought, by its title; its words are in the row's marketEvents.\n" +
       "- since (an ISO date or date and time) keeps the checks completed at or after it: for \"what changed since 1 May\", read every row's changes.\n" +
       "- Paged with page and limit: read pagination.hasMore.\n" +
@@ -296,7 +297,7 @@ export const tools: ToolDef[] = [
   {
     name: "get_positioning_run_detail",
     description:
-      "One past positioning check (runId from get_positioning_history), in exactly get_positioning_dashboard's shape and read the same way: null is not measured (claims null with claimsAvailable; read null unless state is read); a claim is the page's words, never a summary or a score; an empty saidBy in yourClaims means nobody else says it on the homepages read; changes carry level: now = \"Tell me now\", this_week = \"Tell me this week\", record = \"Keep a record\" (stored, never sent on any channel); aboutYou is two pages' words with their dates, never a judgement of either. " +
+      "One past positioning check (runId from get_positioning_history), in exactly get_positioning_dashboard's shape and read the same way: null is not measured (claims null with claimsAvailable; read null unless state is read); a claim is the page's words, never a summary or a score; an empty saidBy in yourClaims means nobody else says it on the homepages read; changes carry level: now = \"Tell me now\", this_week = \"Tell me this week\", record = \"Keep a record\" (stored, never sent on any channel); aboutYou is the pages' words with their dates, never a judgement of a page. " +
       "view works as on the dashboard.\n" +
       "- 400 invalid_run_id: the id is malformed. " +
       "404 run_not_found: no completed positioning check with that id in this project.\n" +
