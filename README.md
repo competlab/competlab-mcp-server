@@ -200,7 +200,7 @@ Competitive intelligence for the AI era: 14 dimensions — 6 monitored continuou
 | **AI Visibility** | Which companies ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews recommend in your category, how often each is named, and where you stand |
 | **AI Sources**    | The pages Perplexity and Google AI Overviews read when they answer your buyers' questions, and whether you are on them                   |
 | **Positioning**   | What each company says on its homepage as the page says it, what you say that nobody else does, what changed, and what pages say about you |
-| **Pricing**       | What each company charges as its own pricing page shows it, what typical buyer setups cost cheapest first and where you stand, what changed, and what pages say about you |
+| **Pricing**       | What each company charges as its pricing page shows it, what typical setups cost cheapest first and where you stand, what changed, and what pages say about you |
 | **Content**       | Sitemap analysis, content categorization (12 categories), URL changelog, content gaps                                                      |
 | **Tech & Trust**  | Tech stacks, security headers (grade A-F), trust signals (26 signals in 5 categories), per-assistant AI access                            |
 
@@ -250,7 +250,7 @@ AI Visibility answers who AI recommends — which brands ChatGPT, Claude, Gemini
 
 | Tool                     | Description                                                                                                                                                  |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `get_pricing_dashboard`  | What each company charges as its own pricing page shows it, what typical buyer setups cost cheapest first and where you stand, what changed, and what pages say about you |
+| `get_pricing_dashboard`  | What each company charges as its pricing page shows it, what typical setups cost cheapest first and where you stand, what changed, and what pages say about you |
 | `get_pricing_history`    | One row per pricing check with what it found changed, in full; filter by `since`                                                                            |
 | `get_pricing_run_detail` | One past pricing check in full, in the dashboard's shape                                                                                                     |
 
